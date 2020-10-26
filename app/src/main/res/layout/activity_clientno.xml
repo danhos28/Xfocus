@@ -41,16 +41,15 @@
             android:textSize="25sp" />
     </LinearLayout>
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="300dp"
         android:layout_height="250dp"
         android:layout_gravity="center"
-
+        android:background="#FFFFFF"
         card_view:cardUseCompatPadding="true"
         card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="1dp"
+        card_view:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
@@ -71,7 +70,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppinsbold"
                 android:gravity="center"
                 android:text="Client"
@@ -86,31 +85,32 @@
                 android:textColor="#0A365E"
                 android:layout_gravity="center"
                 />
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:ems="12"
-                android:layout_marginTop="10dp"
-                android:drawablePadding="12dp"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:id="@+id/clientnumber"
-                android:background="@drawable/custom_input"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="Client Number"
-                android:fontFamily="@font/poppinsmedium"
-                android:inputType="number"
-                android:textSize="14sp"
-                android:drawableStart="@drawable/ic_baseline_business_24"
-                />
+                android:layout_margin="10dp"
+                app:hintTextColor="#0A365E"
+                app:startIconDrawable="@drawable/ic_baseline_business_24"
+                app:startIconTint="#0A365E"
+                app:boxStrokeColor="#0A365E"
+                app:endIconMode="clear_text"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginRight="13dp"
-                android:background="#C9FFC107"
+                android:backgroundTint="#C9FFC107"
                 android:fontFamily="@font/poppinsbold"
                 android:text="Continue"
 
