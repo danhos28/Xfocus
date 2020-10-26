@@ -7,8 +7,4 @@
         <item name="colorAccent">#1D2C45</item>
 
     </style>
-
-    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
-        <item name="colorAccent">#0A365E</item>
-    </style>
 </resources>
