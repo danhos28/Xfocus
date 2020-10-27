@@ -12,7 +12,7 @@ import com.example.xfocus.R;
 
 public class Login extends AppCompatActivity {
     ImageView xfocuslogo;
-    int example;
+    int aaa;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
