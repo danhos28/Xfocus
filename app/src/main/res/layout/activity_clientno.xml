@@ -102,6 +102,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 >
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cl_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -112,13 +113,13 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/btnContinue"
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
                 android:backgroundTint="#C9FFC107"
                 android:fontFamily="@font/poppinsbold"
                 android:text="Continue"
                 android:textColor="#0A365E"
-                android:onClick="ClientNo"
                 />
 
         </LinearLayout>

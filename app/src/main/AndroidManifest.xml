@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StartPages.Login"></activity>
+        <activity android:name=".HomePages.Dashboard"></activity>
+        <activity android:name=".StartPages.Login" />
         <activity android:name=".StartPages.ClientNo" />
         <activity android:name=".StartPages.Splash">
             <intent-filter>
@@ -19,5 +20,7 @@
             </intent-filter>
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
