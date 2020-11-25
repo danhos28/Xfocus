@@ -3,7 +3,6 @@ package com.example.xfocus.StartPages;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -32,32 +30,7 @@ public class Login extends AppCompatActivity {
     EditText username,password;
     TextView client_nama,client_telp,client_alamat;
     Button btnLogin;
-    boolean doubleBackToExitPressedOnce = false;
     int aaa;
-
-    //Controlling the back button
-    @Override
-    public void onBackPressed() {
-        //For back pressed twice for quit
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            finishAffinity();
-            System.exit(0);
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, " Tekan BACK lagi untuk keluar ", Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce=false;
-            }
-        }, 2000);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,26 +73,35 @@ public class Login extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                       String Status = response.optString("status");
                       String Message = response.optString("message");
-                      if (Status.equalsIgnoreCase("already") && !Message.contains(" Telah login pada perangkat lain ")){
-                          //Toast.makeText(getApplicationContext()," Login Successful " , Toast.LENGTH_LONG).show();
-                          Toast.makeText(getApplicationContext(),"stats: " + response, Toast.LENGTH_SHORT).show();
+                      if (Status.equals("already") && !Message.contains("Telah login pada perangkat lain")){
+                          Toast.makeText(getApplicationContext()," Login Successful " , Toast.LENGTH_LONG).show();
+                          //Toast.makeText(getApplicationContext(),"stats: " + response, Toast.LENGTH_SHORT).show();
 
                           Intent intent = new Intent(Login.this, Dashboard.class);
                           startActivity(intent);
                           finish();
                       }
-                      else if(Status.equalsIgnoreCase("already") && Message.contains("Telah login pada perangkat lain")){
-                          Toast.makeText(getApplicationContext()," Anda sudah login pada perangkat lain, coba lagi dalam 1 menit ", Toast.LENGTH_LONG).show();
+                      else if(Status.equals("already") && Message.contains("Telah login pada perangkat lain")){
+                          Toast.makeText(getApplicationContext()," This account is already logged in on another device, please try again in 1 minute ", Toast.LENGTH_LONG).show();
                       }
                       else{
-                          Toast.makeText(getApplicationContext()," Username atau Password salah ", Toast.LENGTH_SHORT).show();
+                          Toast.makeText(getApplicationContext()," username or password is incorrect ", Toast.LENGTH_SHORT).show();
                       }
+                  /*try {
+                        JSONArray jsonArray = response.getJSONArray("client");
+                        JSONObject client = jsonArray.getJSONObject(0);
+                        String cl_name = client.getString("cl_name");
+
+                        Log.i(TAG, cl_name);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }*/
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext()," Username atau Password salah ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext()," Username or Password is incorrect ", Toast.LENGTH_LONG).show();
             }
         });
 
