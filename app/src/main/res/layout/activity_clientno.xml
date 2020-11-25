@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -8,39 +8,38 @@
     android:background="@drawable/loginbg"
     tools:context=".StartPages.ClientNo"
     >
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+
     <LinearLayout
-        android:paddingTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.42">
+
         <ImageView
             android:id="@+id/xfocus"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:src="@drawable/xfocus"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:src="@drawable/xfocus" />
+
         <TextView
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppinsbold"
-            android:text="@string/focus_trading_plus"
             android:layout_gravity="center"
-            android:textColor="#FFC107"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/poppinsbold"
             android:shadowColor="#FFFFFF"
             android:shadowDx="2"
             android:shadowDy="2"
             android:shadowRadius="2"
+            android:text="@string/focus_trading_plus"
+            android:textColor="#FFC107"
             android:textSize="25sp" />
     </LinearLayout>
 
@@ -50,23 +49,23 @@
         android:layout_height="250dp"
         android:layout_gravity="center"
         android:background="#FFFFFF"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="10dp"
-        card_view:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.659">
+        app:layout_constraintVertical_bias="0.748"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:background="#FFFFFF"
             android:orientation="vertical">
 
@@ -79,73 +78,77 @@
                 android:text="Client"
                 android:textColor="#0A365E"
                 android:textSize="23sp" />
+
             <TextView
-                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Please enter your client number"
-                android:fontFamily="@font/poppinsmedium"
-                android:textColor="#0A365E"
                 android:layout_gravity="center"
-                />
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppinsmedium"
+                android:text="Please enter your client number"
+                android:textColor="#0A365E" />
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Client Number"
                 android:layout_margin="10dp"
-                app:hintTextColor="#0A365E"
-                app:startIconDrawable="@drawable/ic_baseline_business_24"
-                app:startIconTint="#0A365E"
+                android:hint="Client Number"
                 app:boxStrokeColor="#0A365E"
                 app:endIconMode="clear_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                >
+                app:hintTextColor="#0A365E"
+                app:startIconDrawable="@drawable/ic_baseline_business_24"
+                app:startIconTint="#0A365E">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cl_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textColor="#0A365E"
-                    />
+                    android:textColor="#0A365E" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+                android:id="@+id/btnContinue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnContinue"
                 android:layout_marginLeft="13dp"
                 android:layout_marginRight="13dp"
                 android:backgroundTint="#C9FFC107"
                 android:fontFamily="@font/poppinsbold"
                 android:text="Continue"
-                android:textColor="#0A365E"
-                />
+                android:textColor="#0A365E" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="0.562">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/rights"
+            android:layout_gravity="center"
             android:fontFamily="@font/poppinsmedium"
+            android:text="@string/rights"
             android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:layout_gravity="center"/>
+            android:textSize="12sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/poppinsmedium"
             android:text="Privacy and Terms"
             android:textColor="#FFFFFF"
-            android:fontFamily="@font/poppinsmedium"
-            android:textSize="12sp"
-            android:layout_gravity="center"/>
+            android:textSize="12sp" />
     </LinearLayout>
-</LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

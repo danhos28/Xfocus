@@ -3,6 +3,7 @@ package com.example.xfocus.StartPages;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,32 @@ public class ClientNo extends AppCompatActivity {
     private static final String TAG = "TAG";
     ImageView xfocuslogo;
     EditText cl_no;
+    boolean doubleBackToExitPressedOnce = false;
     Button btnCon;
+
+    //Controlling the back button
+    @Override
+    public void onBackPressed() {
+        //For back pressed twice for quit
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finishAffinity();
+            System.exit(0);
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, " Tekan BACK lagi untuk keluar ", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +103,7 @@ public class ClientNo extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
-                    Toast.makeText(getApplicationContext()," Incorrect client number ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext()," No client salah ", Toast.LENGTH_SHORT).show();
                 }
             });
 

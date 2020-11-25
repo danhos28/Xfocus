@@ -6,12 +6,21 @@ import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.xfocus.R;
 
 public class Splash extends AppCompatActivity {
     ImageView xfocuslogo;
     Thread timer;
+
+    //Controlling back button
+    @Override
+    public void onBackPressed() {
+        //Disable go back
+        Toast.makeText(Splash.this, "Tidak bisa keluar pada fase ini", Toast.LENGTH_LONG).show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
