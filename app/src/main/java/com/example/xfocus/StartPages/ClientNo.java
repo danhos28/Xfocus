@@ -83,10 +83,4 @@ public class ClientNo extends AppCompatActivity {
 
             requestQueue.add(jsonObjectRequest);
         };
-
-    public void MoveActivity(View view) {
-        Intent intent = new Intent(ClientNo.this, Login.class);
-        startActivity(intent);
-       finish();
-    }
 }

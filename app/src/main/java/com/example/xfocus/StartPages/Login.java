@@ -72,17 +72,21 @@ public class Login extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                       String Status = response.optString("status");
-                      if (Status.equals("already")){
-                          Toast.makeText(getApplicationContext()," Login Successful " , Toast.LENGTH_LONG).show();
+                      String Message = response.optString("message");
+                      if (Status.equals("already") && !Message.contains("Telah login pada perangkat lain")){
+                          //Toast.makeText(getApplicationContext()," Login Successful " , Toast.LENGTH_LONG).show();
+                          Toast.makeText(getApplicationContext(),"stats: " + response, Toast.LENGTH_SHORT).show();
 
                           Intent intent = new Intent(Login.this, Dashboard.class);
                           startActivity(intent);
                           finish();
                       }
-                      else {
-                          Toast.makeText(getApplicationContext()," Username or Password is incorrect ", Toast.LENGTH_SHORT).show();
+                      else if(Status.equals("already") && Message.contains("Telah login pada perangkat lain")){
+                          Toast.makeText(getApplicationContext()," This account is already logged in on another device, please try again in 1 minute ", Toast.LENGTH_LONG).show();
                       }
-
+                      else{
+                          Toast.makeText(getApplicationContext()," username or password is incorrect ", Toast.LENGTH_SHORT).show();
+                      }
                   /*try {
                         JSONArray jsonArray = response.getJSONArray("client");
                         JSONObject client = jsonArray.getJSONObject(0);
@@ -92,7 +96,6 @@ public class Login extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }*/
-
             }
         }, new Response.ErrorListener() {
             @Override
