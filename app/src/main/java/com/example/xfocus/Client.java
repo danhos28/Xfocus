@@ -43,5 +43,25 @@ public class Client {
     public static Byte getCl_logo(){
         return Cl_logo;
     }
-
+    public static void setCl_alamat(String cl_alamat) {
+        Cl_alamat = cl_alamat;
+    }
+    public static void setCl_email(String cl_email) {
+        Cl_email = cl_email;
+    }
+    public static void setCl_id(String cl_id) {
+        Cl_id = cl_id;
+    }
+    public static void setCl_name(String cl_name) {
+        Cl_name = cl_name;
+    }
+    public static void setCl_no(String cl_no) {
+        Cl_no = cl_no;
+    }
+    public static void setCl_telepon(String cl_telepon) {
+        Cl_telepon = cl_telepon;
+    }
+    public static void setCl_logo(Byte cl_logo) {
+        Cl_logo = cl_logo;
+    }
 }
