@@ -74,7 +74,7 @@ public class Login extends AppCompatActivity {
                       String Status = response.optString("status");
                       String Message = response.optString("message");
                       if (Status.equals("already") && !Message.contains("Telah login pada perangkat lain")){
-                          Toast.makeText(getApplicationContext()," Login Successful " , Toast.LENGTH_LONG).show();
+                          Toast.makeText(getApplicationContext()," Login Successful " + response , Toast.LENGTH_LONG).show();
                           //Toast.makeText(getApplicationContext(),"stats: " + response, Toast.LENGTH_SHORT).show();
 
                           Intent intent = new Intent(Login.this, Dashboard.class);
@@ -82,20 +82,15 @@ public class Login extends AppCompatActivity {
                           finish();
                       }
                       else if(Status.equals("already") && Message.contains("Telah login pada perangkat lain")){
-                          Toast.makeText(getApplicationContext()," This account is already logged in on another device, please try again in 1 minute ", Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(getApplicationContext()," This account is already logged in" + response, Toast.LENGTH_LONG).show();
+                          Intent intent = new Intent(Login.this, Dashboard.class);
+                          startActivity(intent);
+                          finish();
                       }
                       else{
-                          Toast.makeText(getApplicationContext()," username or password is incorrect ", Toast.LENGTH_SHORT).show();
+                          Toast.makeText(getApplicationContext()," username or password is incorrect " + response, Toast.LENGTH_SHORT).show();
                       }
-                  /*try {
-                        JSONArray jsonArray = response.getJSONArray("client");
-                        JSONObject client = jsonArray.getJSONObject(0);
-                        String cl_name = client.getString("cl_name");
 
-                        Log.i(TAG, cl_name);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }*/
             }
         }, new Response.ErrorListener() {
             @Override

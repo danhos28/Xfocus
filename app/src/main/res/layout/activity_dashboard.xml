@@ -6,4 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".HomePages.Dashboard">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/main_toolbar"/>
+
+    <Spinner
+        android:id="@+id/spinnerArea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
