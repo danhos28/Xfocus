@@ -1,9 +1,15 @@
 package com.example.xfocus.HomePages;
 
+import android.app.DatePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +27,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity {
-    Spinner spinnerArea;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    TextView first_date, last_date;
+    Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
     ArrayList<String> list_area = new ArrayList<>();
-    ArrayAdapter<String> areaAdapter;
+    ArrayList<String> list_tampilan = new ArrayList<>();
+    ArrayList<String> list_periode = new ArrayList<>();
+    ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
 
     @Override
@@ -38,9 +54,85 @@ public class Dashboard extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
+        first_date = findViewById(R.id.first_date);
+        last_date = findViewById(R.id.last_date);
         requestQueue = Volley.newRequestQueue(this);
         spinnerArea = findViewById(R.id.spinnerArea);
-        comboarea();
+        spinnerPeriode = findViewById(R.id.spinnerPeriode);
+        spinnerTampilan = findViewById(R.id.spinnerTampilan);
+        setSpinner();
+        setDate();
+        first_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date();
+            }
+        });
+        last_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date();
+            }
+        });
+        datelistener1();
+        datelistener2();
+        //comboarea();
+    }
+
+    private void datelistener2() {
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "-" + month + "-" + year;
+                last_date.setText(date);
+            }
+        };
+    }
+
+    private void datelistener1() {
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "-" + month + "-" + year;
+                first_date.setText(date);
+            }
+        };
+    }
+
+    private void setSpinner() {
+        list_area.add("All Cabang");
+        list_area.add("Cabang 1");
+        list_area.add("Cabang 2");
+        list_area.add("Cabang 3");
+        list_tampilan.add("Standar");
+        list_tampilan.add("Dalam Ribu");
+        list_tampilan.add("Dalam Juta");
+        list_periode.add("Periode");
+        list_periode.add("Sampai Hari ini");
+        list_periode.add("Sampai Bulan ini");
+        list_periode.add("Sampai Tahun ini");
+        areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
+        areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tampilanAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_tampilan);
+        tampilanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        periodAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_periode);
+        periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerArea.setAdapter(areaAdapter);
+        spinnerArea.setSelection(0);
+        spinnerTampilan.setAdapter(tampilanAdapter);
+        spinnerTampilan.setSelection(0);
+        spinnerPeriode.setAdapter(periodAdapter);
+        spinnerPeriode.setSelection(0);
+    }
+
+    private void setDate() {
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String date1 = dateFormat.format(yesterday());
+        String date2 = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        first_date.setText(date1);
+        last_date.setText(date2);
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -78,4 +170,25 @@ public class Dashboard extends AppCompatActivity {
             });
             requestQueue.add(jsonObjectRequest);
         }
+
+    private Date yesterday() {
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -2);
+        return cal.getTime();
     }
+
+    private void Date() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                Dashboard.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
+                year, month, day);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+}
+

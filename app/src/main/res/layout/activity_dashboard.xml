@@ -1,22 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomePages.Dashboard">
-
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
     <include
         android:id="@+id/toolbar"
         layout="@layout/main_toolbar"/>
 
-    <Spinner
-        android:id="@+id/spinnerArea"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:padding="10dp"
+        android:background="#F3F3F3"
+        tools:layout_editor_absoluteX="33dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="DASHBOARD"
+        android:fontFamily="@font/poppinsbold"
+        android:textColor="#0A365E"
+        />
+        <Spinner
+            android:id="@+id/spinnerArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/spinner_bg"
+            android:spinnerMode="dropdown"
+            />
+        <Spinner
+            android:id="@+id/spinnerTampilan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/spinner_bg"
+             />
 
+        <Spinner
+            android:id="@+id/spinnerPeriode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/spinner_bg"
+            />
+        <LinearLayout
+            android:paddingTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:paddingStart="20dp"
+                android:background="@drawable/date_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:padding="6dp"
+                android:id="@+id/first_date"
+                android:text="PERIODE1"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:paddingStart="20dp"
+                android:background="@drawable/date_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:padding="6dp"
+                android:id="@+id/last_date"
+                android:text="PERIODE2"/>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Proses"
+                android:elevation="4dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
