@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/cabang"
+        android:title="Ganti Cabang"
+        android:fontFamily="@font/poppinsmedium"
+        android:icon="@drawable/ic_baseline_sync_alt_24"
+        />
+    <item
+        android:title="User config"
+        android:id="@+id/user_set"
+        android:icon="@drawable/ic_user_settings"
+        app:showAsAction="always"/>
+    <item
+        android:title="List Pengajuan Approve"
+        android:id="@+id/pengajuan"/>
+    <item
+        android:title="Ubah Password"
+        android:id="@+id/ubah"/>
+    <item
+        android:title="Keluar"
+        android:id="@+id/keluar"/>
+
+
+</menu>
