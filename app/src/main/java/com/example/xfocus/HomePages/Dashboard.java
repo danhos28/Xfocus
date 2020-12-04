@@ -1,5 +1,6 @@
 package com.example.xfocus.HomePages;
 
+import android.graphics.Color;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +23,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.R;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +56,58 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        //Donut chart in cardview
+        PieChart donutChart1 = findViewById(R.id.DonutChart1);
+        PieChart donutChart2 = findViewById(R.id.DonutChart2);
+
+        //Chart setup 1
+        ArrayList<PieEntry> persediaan = new ArrayList<>();
+        persediaan.add(new PieEntry(500, "Barang Jadi"));
+        persediaan.add(new PieEntry(4500, "Bahan Baku"));
+
+        PieDataSet pieDataSet = new PieDataSet(persediaan, "");
+
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setSliceSpace(5f);
+        pieDataSet.setValueTextSize(16f);
+
+        PieData pieData = new PieData(pieDataSet);
+
+        donutChart1.setData(pieData);
+        donutChart1.setMinAngleForSlices(15f);
+        donutChart1.setDrawEntryLabels(false);
+        donutChart1.getDescription().setEnabled(false);
+        donutChart1.setCenterText("PERSEDIAAN");
+        donutChart1.animateXY(1000,1000);
+
+        //-----------------
+
+        //Chart setup 2
+        ArrayList<PieEntry> kasDanBank = new ArrayList<>();
+        kasDanBank.add(new PieEntry(100000, "Bank 2"));
+        kasDanBank.add(new PieEntry(50000, "Coba Bank"));
+        kasDanBank.add(new PieEntry(39300, "Kas Sales"));
+        kasDanBank.add(new PieEntry(6000, "Bank 1"));
+        kasDanBank.add(new PieEntry(100, "Kas Kecil"));
+        kasDanBank.add(new PieEntry(50, "Bank 3"));
+
+        pieDataSet = new PieDataSet(kasDanBank, "");
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setSliceSpace(5f);
+        pieDataSet.setValueTextSize(16f);
+
+        pieData = new PieData(pieDataSet);
+
+        donutChart2.setData(pieData);
+        donutChart2.setMinAngleForSlices(15f);
+        donutChart2.setDrawEntryLabels(false);
+        donutChart2.getDescription().setEnabled(false);
+        donutChart2.setCenterText("KAS DAN BANK");
+        donutChart2.animateXY(1000,1000);
+
+        //Toolbar dashboard
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
@@ -57,6 +115,8 @@ public class Dashboard extends AppCompatActivity {
         first_date = findViewById(R.id.first_date);
         last_date = findViewById(R.id.last_date);
         requestQueue = Volley.newRequestQueue(this);
+
+        //Spinner dashboard
         spinnerArea = findViewById(R.id.spinnerArea);
         spinnerPeriode = findViewById(R.id.spinnerPeriode);
         spinnerTampilan = findViewById(R.id.spinnerTampilan);
