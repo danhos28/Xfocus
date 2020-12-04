@@ -89,11 +89,12 @@ public class ClientNo extends AppCompatActivity {
                     String Cl_no = response.optString("cl_no");
                     String Cl_id = response.optString("cl_id");
                     String Cl_email = response.optString("cl_email");
+                    String Cl_logo = response.optString("cl_logo");
                     String Cl_name = response.optString("cl_name");
                     String Cl_telepon = response.optString("cl_telepon");
                     String Cl_alamat = response.optString("cl_alamat");
 
-                    Client client = new Client(Cl_alamat,Cl_email,Cl_id,Cl_name,Cl_no,Cl_telepon);
+                    Client client = new Client(Cl_alamat,Cl_email,Cl_id,Cl_name,Cl_no,Cl_telepon, Cl_logo);
 
                     Intent intent = new Intent(ClientNo.this, Login.class);
                     startActivity(intent);

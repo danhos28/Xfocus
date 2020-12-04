@@ -5,9 +5,11 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.xfocus.Client;
+import com.example.xfocus.ClientLogin;
 import com.example.xfocus.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -38,16 +42,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
+    List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
+
     TextView first_date, last_date;
+    Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
-    ArrayList<String> list_area = new ArrayList<>();
-    ArrayList<String> list_tampilan = new ArrayList<>();
-    ArrayList<String> list_periode = new ArrayList<>();
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
 
@@ -136,7 +141,14 @@ public class Dashboard extends AppCompatActivity {
         });
         datelistener1();
         datelistener2();
-        //comboarea();
+
+        submitDashboard = findViewById(R.id.submitDashboard);
+        submitDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetDefaultResult();
+            }
+        });
     }
 
     private void datelistener2() {
@@ -162,7 +174,7 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void setSpinner() {
-        list_area.add("All Cabang");
+        /*list_area.add("All Cabang");
         list_area.add("Cabang 1");
         list_area.add("Cabang 2");
         list_area.add("Cabang 3");
@@ -185,6 +197,7 @@ public class Dashboard extends AppCompatActivity {
         spinnerTampilan.setSelection(0);
         spinnerPeriode.setAdapter(periodAdapter);
         spinnerPeriode.setSelection(0);
+         */
     }
 
     private void setDate() {
@@ -199,37 +212,40 @@ public class Dashboard extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
     }
-        public void comboarea(){
-            String url = "https://xfocus.id/login/auth";
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+    public void GetDefaultResult(){
+        String url = "https://xfocus.id/dashboard/getHeader_app";
+        final List<String> jsonResponses = new ArrayList<>();
 
-                    try {
-                        JSONArray jsonArray = response.getJSONArray("list_area");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String area = jsonObject.getString("areaname");
-                            list_area.add(area);
-                            areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
-                            areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            spinnerArea.setAdapter(areaAdapter);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), " Failed ", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-            requestQueue.add(jsonObjectRequest);
+        JSONObject getData = new JSONObject();
+        try {
+            getData.put("area", ClientLogin.getAreaId());
+            getData.put("firstdate", "2020-12-01");
+            getData.put("isPusat", ClientLogin.getIsAreaPusat());
+            getData.put("latedate", "2020-12-01");
+            getData.put("showby","period");
+            getData.put("app","1");
+            getData.put("clid", ClientLogin.getClientId());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, getData, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+
+    }
 
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();
@@ -251,4 +267,6 @@ public class Dashboard extends AppCompatActivity {
     }
 
 }
+
+
 
