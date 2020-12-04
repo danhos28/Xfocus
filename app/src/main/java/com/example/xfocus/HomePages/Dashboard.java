@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,9 +22,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.xfocus.ClientLogin;
 import com.example.xfocus.R;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,16 +38,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
+    List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
+
     TextView first_date, last_date;
+    Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
-    ArrayList<String> list_area = new ArrayList<>();
-    ArrayList<String> list_tampilan = new ArrayList<>();
-    ArrayList<String> list_periode = new ArrayList<>();
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
 
@@ -50,6 +57,58 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        //Donut chart in cardview
+        PieChart donutChart1 = findViewById(R.id.DonutChart1);
+        PieChart donutChart2 = findViewById(R.id.DonutChart2);
+
+        //Chart setup 1
+        ArrayList<PieEntry> persediaan = new ArrayList<>();
+        persediaan.add(new PieEntry(500, "Barang Jadi"));
+        persediaan.add(new PieEntry(4500, "Bahan Baku"));
+
+        PieDataSet pieDataSet = new PieDataSet(persediaan, "");
+
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setSliceSpace(5f);
+        pieDataSet.setValueTextSize(16f);
+
+        PieData pieData = new PieData(pieDataSet);
+
+        donutChart1.setData(pieData);
+        donutChart1.setMinAngleForSlices(15f);
+        donutChart1.setDrawEntryLabels(false);
+        donutChart1.getDescription().setEnabled(false);
+        donutChart1.setCenterText("PERSEDIAAN");
+        donutChart1.animateXY(1000,1000);
+
+        //-----------------
+
+        //Chart setup 2
+        ArrayList<PieEntry> kasDanBank = new ArrayList<>();
+        kasDanBank.add(new PieEntry(100000, "Bank 2"));
+        kasDanBank.add(new PieEntry(50000, "Coba Bank"));
+        kasDanBank.add(new PieEntry(39300, "Kas Sales"));
+        kasDanBank.add(new PieEntry(6000, "Bank 1"));
+        kasDanBank.add(new PieEntry(100, "Kas Kecil"));
+        kasDanBank.add(new PieEntry(50, "Bank 3"));
+
+        pieDataSet = new PieDataSet(kasDanBank, "");
+        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setSliceSpace(5f);
+        pieDataSet.setValueTextSize(16f);
+
+        pieData = new PieData(pieDataSet);
+
+        donutChart2.setData(pieData);
+        donutChart2.setMinAngleForSlices(15f);
+        donutChart2.setDrawEntryLabels(false);
+        donutChart2.getDescription().setEnabled(false);
+        donutChart2.setCenterText("KAS DAN BANK");
+        donutChart2.animateXY(1000,1000);
+
+        //Toolbar dashboard
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
@@ -57,6 +116,8 @@ public class Dashboard extends AppCompatActivity {
         first_date = findViewById(R.id.first_date);
         last_date = findViewById(R.id.last_date);
         requestQueue = Volley.newRequestQueue(this);
+
+        //Spinner dashboard
         spinnerArea = findViewById(R.id.spinnerArea);
         spinnerPeriode = findViewById(R.id.spinnerPeriode);
         spinnerTampilan = findViewById(R.id.spinnerTampilan);
@@ -76,7 +137,14 @@ public class Dashboard extends AppCompatActivity {
         });
         datelistener1();
         datelistener2();
-        //comboarea();
+
+        submitDashboard = findViewById(R.id.submitDashboard);
+        submitDashboard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GetDefaultResult();
+            }
+        });
     }
 
     private void datelistener2() {
@@ -102,7 +170,7 @@ public class Dashboard extends AppCompatActivity {
     }
 
     private void setSpinner() {
-        list_area.add("All Cabang");
+        /*list_area.add("All Cabang");
         list_area.add("Cabang 1");
         list_area.add("Cabang 2");
         list_area.add("Cabang 3");
@@ -125,6 +193,7 @@ public class Dashboard extends AppCompatActivity {
         spinnerTampilan.setSelection(0);
         spinnerPeriode.setAdapter(periodAdapter);
         spinnerPeriode.setSelection(0);
+         */
     }
 
     private void setDate() {
@@ -139,37 +208,40 @@ public class Dashboard extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
     }
-        public void comboarea(){
-            String url = "https://xfocus.id/login/auth";
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
+    public void GetDefaultResult(){
+        String url = "https://xfocus.id/dashboard/getHeader_app";
+        final List<String> jsonResponses = new ArrayList<>();
 
-                    try {
-                        JSONArray jsonArray = response.getJSONArray("list_area");
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String area = jsonObject.getString("areaname");
-                            list_area.add(area);
-                            areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
-                            areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            spinnerArea.setAdapter(areaAdapter);
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), " Failed ", Toast.LENGTH_SHORT).show();
-
-                }
-            });
-            requestQueue.add(jsonObjectRequest);
+        JSONObject getData = new JSONObject();
+        try {
+            getData.put("area", ClientLogin.getAreaId());
+            getData.put("firstdate", "2020-12-01");
+            getData.put("isPusat", ClientLogin.getIsAreaPusat());
+            getData.put("latedate", "2020-12-01");
+            getData.put("showby","period");
+            getData.put("app","1");
+            getData.put("clid", ClientLogin.getClientId());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, getData, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requestQueue.add(jsonObjectRequest);
+
+    }
 
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();
@@ -191,4 +263,6 @@ public class Dashboard extends AppCompatActivity {
     }
 
 }
+
+
 

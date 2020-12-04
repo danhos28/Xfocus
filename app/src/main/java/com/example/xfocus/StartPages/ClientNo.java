@@ -71,42 +71,43 @@ public class ClientNo extends AppCompatActivity {
         });
     }
     public void ClientNumber(){
-            String postUrl = "https://xfocus.id/login/cek_client";
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
+        String postUrl = "https://xfocus.id/login/cek_client";
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-            JSONObject postData = new JSONObject();
-            try {
-                postData.put("cl_no", cl_no.getText().toString());
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("cl_no", cl_no.getText().toString());
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                // Toast.makeText(getApplicationContext()," status : "+response, Toast.LENGTH_LONG).show();
+                String Cl_no = response.optString("cl_no");
+                String Cl_id = response.optString("cl_id");
+                String Cl_email = response.optString("cl_email");
+                String Cl_logo = response.optString("cl_logo");
+                String Cl_name = response.optString("cl_name");
+                String Cl_telepon = response.optString("cl_telepon");
+                String Cl_alamat = response.optString("cl_alamat");
+
+                Client client = new Client(Cl_alamat,Cl_email,Cl_id,Cl_name,Cl_no,Cl_telepon, Cl_logo);
+
+                Intent intent = new Intent(ClientNo.this, Login.class);
+                startActivity(intent);
+                finish();
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                Toast.makeText(getApplicationContext()," No client salah ", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                  // Toast.makeText(getApplicationContext()," status : "+response, Toast.LENGTH_LONG).show();
-                    String Cl_no = response.optString("cl_no");
-                    String Cl_id = response.optString("cl_id");
-                    String Cl_email = response.optString("cl_email");
-                    String Cl_name = response.optString("cl_name");
-                    String Cl_telepon = response.optString("cl_telepon");
-                    String Cl_alamat = response.optString("cl_alamat");
-
-                    Client client = new Client(Cl_alamat,Cl_email,Cl_id,Cl_name,Cl_no,Cl_telepon);
-
-                    Intent intent = new Intent(ClientNo.this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    error.printStackTrace();
-                    Toast.makeText(getApplicationContext()," No client salah ", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            requestQueue.add(jsonObjectRequest);
-        };
+        requestQueue.add(jsonObjectRequest);
+    };
 }

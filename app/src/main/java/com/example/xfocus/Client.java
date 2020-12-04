@@ -1,12 +1,10 @@
 package com.example.xfocus;
 
 public class Client {
-    private static String Cl_alamat, Cl_email, Cl_id,Cl_name,Cl_no,Cl_telepon;
-    private static Byte Cl_logo;
+    private static String Cl_alamat, Cl_email, Cl_id,Cl_name,Cl_no,Cl_telepon, Cl_logo;
 
-    public Client( String Cl_alamat, String Cl_email, String Cl_id, String Cl_name, String Cl_no, String Cl_telepon
-                   //Byte Cl_logo
-    ){
+    public Client( String Cl_alamat, String Cl_email, String Cl_id, String Cl_name, String Cl_no, String Cl_telepon, String Cl_logo)
+    {
         this.Cl_alamat = Cl_alamat;
         this.Cl_email = Cl_email;
         this.Cl_id = Cl_id;
@@ -40,7 +38,7 @@ public class Client {
     {
         return Cl_telepon;
     }
-    public static Byte getCl_logo(){
+    public static String getCl_logo(){
         return Cl_logo;
     }
     public static void setCl_alamat(String cl_alamat) {
@@ -61,7 +59,7 @@ public class Client {
     public static void setCl_telepon(String cl_telepon) {
         Cl_telepon = cl_telepon;
     }
-    public static void setCl_logo(Byte cl_logo) {
+    public static void setCl_logo(String cl_logo) {
         Cl_logo = cl_logo;
     }
 }
