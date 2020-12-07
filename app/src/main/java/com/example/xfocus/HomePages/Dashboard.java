@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -52,9 +51,10 @@ public class Dashboard extends AppCompatActivity {
 
     LinearLayout persediaanDropdown, kasdanbankDropdown;
     CardView persediaanCard, kasdanbankCard;
-    TextView first_date, last_date;
+    TextView first_date, last_date, username;
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
+    ArrayList<String> list_area = new ArrayList<>();
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
@@ -173,7 +173,7 @@ public class Dashboard extends AppCompatActivity {
         first_date = findViewById(R.id.first_date);
         last_date = findViewById(R.id.last_date);
         requestQueue = Volley.newRequestQueue(this);
-
+        username = findViewById(R.id.NamaUser);
         //Spinner dashboard
         spinnerArea = findViewById(R.id.spinnerArea);
         spinnerPeriode = findViewById(R.id.spinnerPeriode);
@@ -194,7 +194,7 @@ public class Dashboard extends AppCompatActivity {
         });
         datelistener1();
         datelistener2();
-
+        username.setText(ClientLogin.getUserName());
         submitDashboard = findViewById(R.id.submitDashboard);
         submitDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -238,19 +238,12 @@ public class Dashboard extends AppCompatActivity {
         list_periode.add("Sampai Hari ini");
         list_periode.add("Sampai Bulan ini");
         list_periode.add("Sampai Tahun ini");
+        */
+        list_area = ClientLogin.getListArea();
         areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tampilanAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_tampilan);
-        tampilanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        periodAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_periode);
-        periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerArea.setAdapter(areaAdapter);
         spinnerArea.setSelection(0);
-        spinnerTampilan.setAdapter(tampilanAdapter);
-        spinnerTampilan.setSelection(0);
-        spinnerPeriode.setAdapter(periodAdapter);
-        spinnerPeriode.setSelection(0);
-         */
     }
 
     private void setDate() {

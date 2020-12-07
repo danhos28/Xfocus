@@ -19,18 +19,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.Client;
+import com.example.xfocus.ClientLogin;
 import com.example.xfocus.HomePages.Dashboard;
 import com.example.xfocus.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class Login extends AppCompatActivity {
     ImageView xfocuslogo;
     EditText username,password;
     TextView client_nama,client_telp,client_alamat;
     Button btnLogin;
-    int aaa;
+    ArrayList<String> listArea = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(){
-        String postUrl = "https://xfocus.id/login/auth";
+        String postUrl = "https://xfocus.id/login/auth_app";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JSONObject postData = new JSONObject();
@@ -68,21 +72,35 @@ public class Login extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                       String Status = response.optString("status");
-                      String Message = response.optString("message");
-                      if (Status.equals("already") && !Message.contains("Telah login pada perangkat lain")){
-                          Toast.makeText(getApplicationContext()," Login Successful " + response , Toast.LENGTH_LONG).show();
-                          //Toast.makeText(getApplicationContext(),"stats: " + response, Toast.LENGTH_SHORT).show();
+                      String AreaId = response.optString("AreaId");
+                      String AreaName = response.optString("AreaName");
+                      String isAreaPusat = response.optString("isAreaPusat");
+                      String UserId = response.optString("UserId");
+                      String UserName = response.optString("UserName");
+                      String ClientId = response.optString("ClientId");
+                      String Client = response.optString("Client");
+                      String ClientLogo = response.optString("ClientLogo");
+                      String PegawaiId = response.optString("PegawaiId");
+                      String PegawaiName = response.optString("PegawaiName");
+                      String PegawaiAlias = response.optString("PegawaiAlias");
+                      try {
+                        JSONArray jsonArray = response.getJSONArray("list_area");
+                            for(int i = 0; i <jsonArray.length();i++){
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String areaName = jsonObject.optString("area_name");
+                            listArea.add(areaName);
+                        }
+                      } catch (JSONException e) {
+                    e.printStackTrace();
+                    }
+                      ClientLogin clientLogin = new ClientLogin(Status,AreaId,AreaName,isAreaPusat,UserId,UserName,ClientId,Client,ClientLogo,PegawaiId,PegawaiName,PegawaiAlias,listArea);
 
-                          Intent intent = new Intent(Login.this, Dashboard.class);
-                          startActivity(intent);
-                          finish();
-                      }
-                      else if(Status.equals("already") && Message.contains("Telah login pada perangkat lain")){
-                        //  Toast.makeText(getApplicationContext()," This account is already logged in" + response, Toast.LENGTH_LONG).show();
+                      if (Status.equals("success")){
+                          Toast.makeText(getApplicationContext()," Login Successful " + response , Toast.LENGTH_LONG).show();
                           Intent intent = new Intent(Login.this, Dashboard.class);
                           startActivity(intent);
                           finish();
@@ -96,7 +114,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext()," Username or Password is incorrect ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext()," Username or Password is incorrect", Toast.LENGTH_LONG).show();
             }
         });
 
