@@ -11,6 +11,7 @@
         layout="@layout/main_toolbar"/>
 
     <ScrollView
+        android:id="@+id/scrollDashboard"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -90,7 +91,7 @@
                     <Button
                         android:id="@+id/submitDashboard"
                         android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Proses"
                         android:elevation="4dp"
@@ -100,42 +101,83 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="200dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:background="#FFECB3"
+                android:background="#0C1443"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
                     android:layout_gravity="right"
-                  />
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/finance_background_resized"
+                    tools:srcCompat="@drawable/finance_background_resized" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/poppinsmedium"
-                    android:lineHeight="24sp"
+                    android:layout_marginTop="-5dp"
+                    android:fontFamily="@font/bungee"
+                    android:lineHeight="27sp"
                     android:text="FINANCIAL SUMMARY"
-                    android:textColor="@android:color/black"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/muli_black"
+                    android:textColor="@android:color/white"
                     android:text="Semua laporan financial akan ditampilkan disini, silahkan scroll" />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/persediaanDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="20dp"
+                android:background="#E0E0E0"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    app:srcCompat="@drawable/double_down" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/brandon_grostesque_black"
+                    android:lineHeight="24sp"
+                    android:layout_marginTop="-30dp"
+                    android:text="PERSEDIAAN"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/persediaanCard"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#82B1FF"
@@ -152,7 +194,41 @@
                     android:layout_height="400dp"/>
             </com.google.android.material.card.MaterialCardView>
 
+            <LinearLayout
+                android:id="@+id/kasdanbankDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="20dp"
+                android:background="#E0E0E0"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    app:srcCompat="@drawable/double_down" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/brandon_grostesque_black"
+                    android:lineHeight="24sp"
+                    android:layout_marginTop="-30dp"
+                    android:text="KAS DAN BANK"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/kasdanbankCard"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#F44336"

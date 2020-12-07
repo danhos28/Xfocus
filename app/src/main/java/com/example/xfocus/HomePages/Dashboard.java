@@ -9,12 +9,16 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -46,16 +50,69 @@ public class Dashboard extends AppCompatActivity {
 
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
 
+    LinearLayout persediaanDropdown, kasdanbankDropdown;
+    CardView persediaanCard, kasdanbankCard;
     TextView first_date, last_date;
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
+    ScrollView scrollDashboard;
+
+    boolean tappedPersediaan = false;
+    boolean tappedKasdanbank = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        //Scrollview hooks
+        scrollDashboard = findViewById(R.id.scrollDashboard);
+
+        //Dropdown Hooks
+        persediaanDropdown = findViewById(R.id.persediaanDropdown);
+        persediaanCard = findViewById(R.id.persediaanCard);
+        kasdanbankDropdown = findViewById(R.id.kasdanbankDropdown);
+        kasdanbankCard = findViewById(R.id.kasdanbankCard);
+
+        persediaanDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tappedPersediaan == false){
+                    persediaanCard.setVisibility(View.VISIBLE);
+                    scrollDashboard.postDelayed(new Runnable() {
+                        public void run() {
+                            scrollDashboard.scrollTo(0, (int)persediaanCard.getY());
+                        }
+                    }, 100);
+                    tappedPersediaan = true;
+                }
+                else if (tappedPersediaan == true){
+                    persediaanCard.setVisibility(View.GONE);
+                    tappedPersediaan = false;
+                }
+            }
+        });
+
+        kasdanbankDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tappedKasdanbank == false){
+                    kasdanbankCard.setVisibility(View.VISIBLE);
+                    scrollDashboard.postDelayed(new Runnable() {
+                        public void run() {
+                            scrollDashboard.scrollTo(0, (int)kasdanbankCard.getY());
+                        }
+                    }, 100);
+                    tappedKasdanbank = true;
+                }
+                else if (tappedKasdanbank == true){
+                    kasdanbankCard.setVisibility(View.GONE);
+                    tappedKasdanbank = false;
+                }
+            }
+        });
 
         //Donut chart in cardview
         PieChart donutChart1 = findViewById(R.id.DonutChart1);
