@@ -1,14 +1,20 @@
 package com.example.xfocus.HomePages;
 
+import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -31,6 +37,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONException;
@@ -58,6 +65,8 @@ public class Dashboard extends AppCompatActivity {
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
+    PieChart donutChartPersediaan, donutChartKasdanBank;
+    ImageView persediaanDropImage, kasdanbankDropImage;
 
     boolean tappedPersediaan = false;
     boolean tappedKasdanbank = false;
@@ -76,68 +85,52 @@ public class Dashboard extends AppCompatActivity {
         kasdanbankDropdown = findViewById(R.id.kasdanbankDropdown);
         kasdanbankCard = findViewById(R.id.kasdanbankCard);
 
+        //Logo
+        persediaanDropImage = findViewById(R.id.persediaanDropImage);
+        kasdanbankDropImage = findViewById(R.id.kasdanbankDropImage);
+
         persediaanDropdown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (tappedPersediaan == false){
-                    persediaanCard.setVisibility(View.VISIBLE);
-                    scrollDashboard.postDelayed(new Runnable() {
-                        public void run() {
-                            scrollDashboard.scrollTo(0, (int)persediaanCard.getY());
-                        }
-                    }, 100);
+                    setCardVisible(persediaanCard, donutChartPersediaan);
                     tappedPersediaan = true;
+                    animateDropDownChart(90,0,persediaanDropImage,-90);
                 }
                 else if (tappedPersediaan == true){
                     persediaanCard.setVisibility(View.GONE);
                     tappedPersediaan = false;
+                    animateDropDownChart(-90,0,persediaanDropImage, 90);
                 }
             }
         });
 
         kasdanbankDropdown.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 if (tappedKasdanbank == false){
-                    kasdanbankCard.setVisibility(View.VISIBLE);
-                    scrollDashboard.postDelayed(new Runnable() {
-                        public void run() {
-                            scrollDashboard.scrollTo(0, (int)kasdanbankCard.getY());
-                        }
-                    }, 100);
+                    setCardVisible(kasdanbankCard, donutChartKasdanBank);
                     tappedKasdanbank = true;
+                    animateDropDownChart(90,0,kasdanbankDropImage,-90);
                 }
                 else if (tappedKasdanbank == true){
                     kasdanbankCard.setVisibility(View.GONE);
                     tappedKasdanbank = false;
+                    animateDropDownChart(-90,0,kasdanbankDropImage, 90);
                 }
             }
         });
 
         //Donut chart in cardview
-        PieChart donutChart1 = findViewById(R.id.DonutChart1);
-        PieChart donutChart2 = findViewById(R.id.DonutChart2);
+        donutChartPersediaan = findViewById(R.id.DonutChart1);
+        donutChartKasdanBank = findViewById(R.id.DonutChart2);
 
         //Chart setup 1
         ArrayList<PieEntry> persediaan = new ArrayList<>();
         persediaan.add(new PieEntry(500, "Barang Jadi"));
         persediaan.add(new PieEntry(4500, "Bahan Baku"));
 
-        PieDataSet pieDataSet = new PieDataSet(persediaan, "");
-
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        pieDataSet.setValueTextColor(Color.BLACK);
-        pieDataSet.setSliceSpace(5f);
-        pieDataSet.setValueTextSize(16f);
-
-        PieData pieData = new PieData(pieDataSet);
-
-        donutChart1.setData(pieData);
-        donutChart1.setMinAngleForSlices(15f);
-        donutChart1.setDrawEntryLabels(false);
-        donutChart1.getDescription().setEnabled(false);
-        donutChart1.setCenterText("PERSEDIAAN");
-        donutChart1.animateXY(1000,1000);
+        setDonutCharts(persediaan, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
 
         //-----------------
 
@@ -150,20 +143,7 @@ public class Dashboard extends AppCompatActivity {
         kasDanBank.add(new PieEntry(100, "Kas Kecil"));
         kasDanBank.add(new PieEntry(50, "Bank 3"));
 
-        pieDataSet = new PieDataSet(kasDanBank, "");
-        pieDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
-        pieDataSet.setValueTextColor(Color.BLACK);
-        pieDataSet.setSliceSpace(5f);
-        pieDataSet.setValueTextSize(16f);
-
-        pieData = new PieData(pieDataSet);
-
-        donutChart2.setData(pieData);
-        donutChart2.setMinAngleForSlices(15f);
-        donutChart2.setDrawEntryLabels(false);
-        donutChart2.getDescription().setEnabled(false);
-        donutChart2.setCenterText("KAS DAN BANK");
-        donutChart2.animateXY(1000,1000);
+        setDonutCharts(kasDanBank, ColorTemplate.MATERIAL_COLORS, donutChartKasdanBank, "KAS DAN BANK");
 
         //Toolbar dashboard
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -204,6 +184,7 @@ public class Dashboard extends AppCompatActivity {
         });
     }
 
+    //Setting the date
     private void datelistener2() {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -215,6 +196,7 @@ public class Dashboard extends AppCompatActivity {
         };
     }
 
+    //Setting the date
     private void datelistener1() {
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -226,6 +208,7 @@ public class Dashboard extends AppCompatActivity {
         };
     }
 
+    //Setting up the spinner for drop down view
     private void setSpinner() {
         /*list_area.add("All Cabang");
         list_area.add("Cabang 1");
@@ -246,6 +229,7 @@ public class Dashboard extends AppCompatActivity {
         spinnerArea.setSelection(0);
     }
 
+    //Setting the date
     private void setDate() {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         String date1 = dateFormat.format(yesterday());
@@ -254,11 +238,13 @@ public class Dashboard extends AppCompatActivity {
         last_date.setText(date2);
     }
 
+    //Setting up the option menu
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
     }
 
+    //Getting the default result for the diagrams
     public void GetDefaultResult(){
         String url = "https://xfocus.id/dashboard/getHeader_app";
         final List<String> jsonResponses = new ArrayList<>();
@@ -293,12 +279,14 @@ public class Dashboard extends AppCompatActivity {
 
     }
 
+    //Getting yesterday's date
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -2);
         return cal.getTime();
     }
 
+    //Setting up the date view
     private void Date() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -312,6 +300,46 @@ public class Dashboard extends AppCompatActivity {
         dialog.show();
     }
 
+    //Set the cardview to visible
+    private void setCardVisible(final CardView cardDashboard, final PieChart donutChart){
+        cardDashboard.setVisibility(View.VISIBLE);
+        scrollDashboard.postDelayed(new Runnable() {
+            public void run() {
+                scrollDashboard.smoothScrollTo(0, (int)cardDashboard.getY());
+                donutChart.animateXY(1000,1000);
+            }
+        }, 100);
+    }
+
+    //Set up the diagram for viewing all data
+    private void setDonutCharts(ArrayList<PieEntry> pieEntries, int[] colorTemplate, PieChart pieChart, String chartName){
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+
+        pieDataSet.setColors(colorTemplate);
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setSliceSpace(5f);
+        pieDataSet.setValueTextSize(16f);
+
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueFormatter(new PercentFormatter(pieChart));
+        //pieData.setDrawValues(true);
+
+        pieChart.setData(pieData);
+        pieChart.setUsePercentValues(true);
+        pieChart.setMinAngleForSlices(15f);
+        pieChart.setDrawEntryLabels(false);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setCenterText(chartName);
+    }
+
+    //Set up the animation for drop down view of Charts
+    private void  animateDropDownChart(int angleA, int angleB, ImageView imageView, int rotationValue){
+        RotateAnimation rotate = new RotateAnimation(angleA, angleB, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(500);
+        rotate.setInterpolator(new LinearInterpolator());
+        imageView.startAnimation(rotate);
+        imageView.setRotation(imageView.getRotation() + rotationValue);
+    }
 }
 
 

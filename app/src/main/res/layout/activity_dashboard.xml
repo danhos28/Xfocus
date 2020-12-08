@@ -158,6 +158,8 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/persediaanDropImage"
+                    android:rotation="90"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right"
@@ -209,6 +211,8 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/kasdanbankDropImage"
+                    android:rotation="90"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="right"
