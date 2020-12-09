@@ -1,9 +1,7 @@
 package com.example.xfocus.HomePages;
 
-import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -51,7 +50,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class Dashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
@@ -62,11 +61,14 @@ public class Dashboard extends AppCompatActivity {
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
     ArrayList<String> list_area = new ArrayList<>();
+    ArrayList<String> list_tampilan = new ArrayList<>();
+    ArrayList<String> list_periode = new ArrayList<>();
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
     PieChart donutChartPersediaan, donutChartKasdanBank;
     ImageView persediaanDropImage, kasdanbankDropImage;
+    String area_id, periode;
 
     boolean tappedPersediaan = false;
     boolean tappedKasdanbank = false;
@@ -175,6 +177,11 @@ public class Dashboard extends AppCompatActivity {
         datelistener1();
         datelistener2();
         username.setText(ClientLogin.getUserName());
+        //spinner
+        spinnerArea.setOnItemSelectedListener(this);
+        spinnerTampilan.setOnItemSelectedListener(this);
+        spinnerPeriode.setOnItemSelectedListener(this);
+        //submit btn
         submitDashboard = findViewById(R.id.submitDashboard);
         submitDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,10 +217,6 @@ public class Dashboard extends AppCompatActivity {
 
     //Setting up the spinner for drop down view
     private void setSpinner() {
-        /*list_area.add("All Cabang");
-        list_area.add("Cabang 1");
-        list_area.add("Cabang 2");
-        list_area.add("Cabang 3");
         list_tampilan.add("Standar");
         list_tampilan.add("Dalam Ribu");
         list_tampilan.add("Dalam Juta");
@@ -221,12 +224,22 @@ public class Dashboard extends AppCompatActivity {
         list_periode.add("Sampai Hari ini");
         list_periode.add("Sampai Bulan ini");
         list_periode.add("Sampai Tahun ini");
-        */
         list_area = ClientLogin.getListArea();
+        //spinner list area
         areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerArea.setAdapter(areaAdapter);
         spinnerArea.setSelection(0);
+        //spinner tampilan
+        tampilanAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_tampilan);
+        tampilanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTampilan.setAdapter(tampilanAdapter);
+        spinnerTampilan.setSelection(0);
+        //spinner periode
+        periodAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_periode);
+        periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPeriode.setAdapter(periodAdapter);
+        spinnerPeriode.setSelection(0);
     }
 
     //Setting the date
@@ -251,11 +264,11 @@ public class Dashboard extends AppCompatActivity {
 
         JSONObject getData = new JSONObject();
         try {
-            getData.put("area", ClientLogin.getAreaId());
-            getData.put("firstdate", "2020-12-01");
+            getData.put("area", area_id);
+            getData.put("firstdate", first_date);
             getData.put("isPusat", ClientLogin.getIsAreaPusat());
-            getData.put("latedate", "2020-12-01");
-            getData.put("showby","period");
+            getData.put("latedate", last_date);
+            getData.put("showby",periode);
             getData.put("app","1");
             getData.put("clid", ClientLogin.getClientId());
         } catch (JSONException e) {
@@ -286,7 +299,7 @@ public class Dashboard extends AppCompatActivity {
         return cal.getTime();
     }
 
-    //Setting up the date view
+    //Setting up the datepick view
     private void Date() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -339,6 +352,39 @@ public class Dashboard extends AppCompatActivity {
         rotate.setInterpolator(new LinearInterpolator());
         imageView.startAnimation(rotate);
         imageView.setRotation(imageView.getRotation() + rotationValue);
+    }
+    //on spinner's item selected
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
+        switch (parent.getId()){
+            case R.id.spinnerArea:
+                String areaName = parent.getItemAtPosition(pos).toString();
+                int index = list_area.indexOf(areaName);
+                area_id = ClientLogin.getListAreaId().get(index);
+                break;
+            case R.id.spinnerPeriode:
+                periode = parent.getItemAtPosition(pos).toString();
+                switch (periode){
+                    case "Periode":
+                        periode = "period";
+                        break;
+                    case "Sampai Hari ini":
+                        periode = "day";
+                        break;
+                    case "Sampai Bulan ini":
+                        periode = "month";
+                        break;
+                    case "Sampai Tahun ini":
+                        periode = "year";
+                        break;
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
 

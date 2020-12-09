@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class ClientLogin {
     private static String Status, AreaId, AreaName, isAreaPusat, UserId, UserName, ClientId, Client, ClientLogo, PegawaiId, PegawaiName, PegawaiAlias;
     private static ArrayList<String> listArea = new ArrayList();
+    private static ArrayList<String> listAreaId = new ArrayList<>();
 
-    public ClientLogin (String Status, String AreaId, String AreaName, String isAreaPusat, String UserId, String UserName, String ClientId, String Client, String ClientLogo, String PegawaiId, String PegawaiName, String PegawaiAlias, ArrayList<String> listArea)
+    public ClientLogin (String Status, String AreaId, String AreaName, String isAreaPusat, String UserId, String UserName, String ClientId, String Client, String ClientLogo, String PegawaiId, String PegawaiName, String PegawaiAlias, ArrayList<String> listArea,ArrayList<String> listAreaId)
     {
         this.Status = Status;
         this.AreaId = AreaId;
@@ -21,6 +22,7 @@ public class ClientLogin {
         this.PegawaiName = PegawaiName;
         this.PegawaiAlias = PegawaiAlias;
         this.listArea = listArea;
+        this.listAreaId = listAreaId;
     }
 
     public static String getStatus() {
@@ -125,5 +127,13 @@ public class ClientLogin {
 
     public static void setListArea(ArrayList<String> listArea) {
         ClientLogin.listArea = listArea;
+    }
+
+    public static ArrayList<String> getListAreaId() {
+        return listAreaId;
+    }
+
+    public static void setListAreaId(ArrayList<String> listAreaId) {
+        ClientLogin.listAreaId = listAreaId;
     }
 }
