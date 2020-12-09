@@ -35,6 +35,7 @@ public class Login extends AppCompatActivity {
     TextView client_nama,client_telp,client_alamat;
     Button btnLogin;
     ArrayList<String> listArea = new ArrayList<String>();
+    ArrayList<String> listAreaId = new ArrayList<String>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,24 +90,37 @@ public class Login extends AppCompatActivity {
                       String PegawaiAlias = response.optString("PegawaiAlias");
                       try {
                         JSONArray jsonArray = response.getJSONArray("list_area");
-                            for(int i = 0; i <jsonArray.length();i++){
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String areaName = jsonObject.optString("area_name");
-                            listArea.add(areaName);
+                        JSONObject jsonObject = jsonArray.getJSONObject(0);
+                        String areaName = jsonObject.optString("area_name");
+                        String areaId = jsonObject.optString("area_id");
+                        listArea.add("All Cabang");
+                        listArea.add(areaName);
+                        listAreaId.add("all");
+                        listAreaId.add(areaId);
+                        JSONArray areaList = jsonArray.getJSONArray(1);
+                            for(int j = 1; j < areaList.length();j++){
+                                   if(j % 2 == 0) {
+                                       String areaName2 = areaList.getString(j);
+                                       listArea.add(areaName2);
+                                   }
+                                   else{
+                                       String areaId2 = areaList.getString(j);
+                                       listAreaId.add(areaId2);
+                                   }
                         }
                       } catch (JSONException e) {
                     e.printStackTrace();
                     }
-                      ClientLogin clientLogin = new ClientLogin(Status,AreaId,AreaName,isAreaPusat,UserId,UserName,ClientId,Client,ClientLogo,PegawaiId,PegawaiName,PegawaiAlias,listArea);
+                      ClientLogin clientLogin = new ClientLogin(Status,AreaId,AreaName,isAreaPusat,UserId,UserName,ClientId,Client,ClientLogo,PegawaiId,PegawaiName,PegawaiAlias,listArea,listAreaId);
 
                       if (Status.equals("success")){
-                          Toast.makeText(getApplicationContext()," Login Successful " + response , Toast.LENGTH_LONG).show();
+                          Toast.makeText(getApplicationContext(),"Login Successful" , Toast.LENGTH_LONG).show();
                           Intent intent = new Intent(Login.this, Dashboard.class);
                           startActivity(intent);
                           finish();
                       }
                       else{
-                          Toast.makeText(getApplicationContext()," username or password is incorrect " + response, Toast.LENGTH_SHORT).show();
+                          Toast.makeText(getApplicationContext(),"username or password is incorrect", Toast.LENGTH_SHORT).show();
                       }
 
             }
