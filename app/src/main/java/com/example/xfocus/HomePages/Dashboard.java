@@ -24,11 +24,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.R;
@@ -39,19 +40,17 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private DatePickerDialog.OnDateSetListener mDateSetListener,mDateSetListener2;
 
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
 
@@ -69,6 +68,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     PieChart donutChartPersediaan, donutChartKasdanBank;
     ImageView persediaanDropImage, kasdanbankDropImage;
     String area_id, periode;
+    String label;
 
     boolean tappedPersediaan = false;
     boolean tappedKasdanbank = false;
@@ -171,7 +171,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         last_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date();
+                Date2();
             }
         });
         datelistener1();
@@ -193,7 +193,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     //Setting the date
     private void datelistener2() {
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        mDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
@@ -259,37 +259,38 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     //Getting the default result for the diagrams
     public void GetDefaultResult(){
-        String url = "https://xfocus.id/dashboard/getHeader_app";
-        final List<String> jsonResponses = new ArrayList<>();
-
-        JSONObject getData = new JSONObject();
-        try {
-            getData.put("area", area_id);
-            getData.put("firstdate", first_date);
-            getData.put("isPusat", ClientLogin.getIsAreaPusat());
-            getData.put("latedate", last_date);
-            getData.put("showby",periode);
-            getData.put("app","1");
-            getData.put("clid", ClientLogin.getClientId());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        String url ="https://xfocus.id/dashboard/getHeader?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, getData, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-            }
-        }, new Response.ErrorListener() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String data = response.toString();
+                        Toast.makeText(getApplicationContext(), "success: "+data, Toast.LENGTH_LONG).show();
+
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
             }
-        });
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
 
-        requestQueue.add(jsonObjectRequest);
-
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Cookie","xfocus_session=02587c1c8cfe1dcc2e164a7a126b913ceec89765");
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(stringRequest);
     }
 
     //Getting yesterday's date
@@ -308,6 +309,18 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
         DatePickerDialog dialog = new DatePickerDialog(
                 Dashboard.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
+                year, month, day);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+    private void Date2() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                Dashboard.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener2,
                 year, month, day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();

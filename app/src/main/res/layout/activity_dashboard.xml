@@ -159,10 +159,10 @@
 
                 <ImageView
                     android:id="@+id/persediaanDropImage"
-                    android:rotation="90"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="13dp"
+                    android:layout_height="31dp"
                     android:layout_gravity="right"
+                    android:rotation="90"
                     app:srcCompat="@drawable/double_down" />
 
                 <TextView

@@ -113,8 +113,8 @@ public class Login extends AppCompatActivity {
                     }
                       ClientLogin clientLogin = new ClientLogin(Status,AreaId,AreaName,isAreaPusat,UserId,UserName,ClientId,Client,ClientLogo,PegawaiId,PegawaiName,PegawaiAlias,listArea,listAreaId);
 
-                      if (Status.equals("success")){
-                          Toast.makeText(getApplicationContext(),"Login Successful" , Toast.LENGTH_LONG).show();
+                      if (Status.equals("success") && !AreaId.equals("null")){
+                          //Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_LONG).show();
                           Intent intent = new Intent(Login.this, Dashboard.class);
                           startActivity(intent);
                           finish();
