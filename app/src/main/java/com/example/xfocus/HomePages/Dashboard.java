@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
@@ -33,6 +34,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.R;
+import com.example.xfocus.StartPages.ClientNo;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -62,6 +64,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_area = new ArrayList<>();
     ArrayList<String> list_tampilan = new ArrayList<>();
     ArrayList<String> list_periode = new ArrayList<>();
+
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
@@ -69,6 +72,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ImageView persediaanDropImage, kasdanbankDropImage;
     String area_id, periode;
     String label;
+
 
     boolean tappedPersediaan = false;
     boolean tappedKasdanbank = false;
@@ -78,6 +82,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        //Toast.makeText(getApplicationContext(), "your cookies: "+ ClientNo.cookiesKey[0], Toast.LENGTH_LONG).show();
         //Scrollview hooks
         scrollDashboard = findViewById(R.id.scrollDashboard);
 
@@ -187,6 +192,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(View view) {
                 GetDefaultResult();
+
+                Log.e("test2: ", ClientNo.cookiesKey[0]);
             }
         });
     }
@@ -282,7 +289,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Cookie","xfocus_session=02587c1c8cfe1dcc2e164a7a126b913ceec89765");
+                headers.put("Cookie","xfocus_session=7a8d71de8b71a488850735fca5c0b23bc1a16771");
                 headers.put("Content-Type","application/json");
                 return headers;
             }

@@ -28,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
     ImageView xfocuslogo;
@@ -36,6 +37,8 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     ArrayList<String> listArea = new ArrayList<String>();
     ArrayList<String> listAreaId = new ArrayList<String>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +63,13 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    public void login(){
+    public void login() {
         String postUrl = "https://xfocus.id/login/auth_app";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JSONObject postData = new JSONObject();
         try {
-            postData.put("cl_no",  Client.getCl_no());
+            postData.put("cl_no", Client.getCl_no());
             postData.put("username", username.getText().toString());
             postData.put("password", password.getText().toString());
         } catch (JSONException e) {
@@ -76,64 +79,75 @@ public class Login extends AppCompatActivity {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, postUrl, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                      String Status = response.optString("status");
-                      String AreaId = response.optString("AreaId");
-                      String AreaName = response.optString("AreaName");
-                      String isAreaPusat = response.optString("isAreaPusat");
-                      String UserId = response.optString("UserId");
-                      String UserName = response.optString("UserName");
-                      String ClientId = response.optString("ClientId");
-                      String Client = response.optString("Client");
-                      String ClientLogo = response.optString("ClientLogo");
-                      String PegawaiId = response.optString("PegawaiId");
-                      String PegawaiName = response.optString("PegawaiName");
-                      String PegawaiAlias = response.optString("PegawaiAlias");
-                      try {
-                        JSONArray jsonArray = response.getJSONArray("list_area");
-                        JSONObject jsonObject = jsonArray.getJSONObject(0);
-                        String areaName = jsonObject.optString("area_name");
-                        String areaId = jsonObject.optString("area_id");
-                        listArea.add("All Cabang");
-                        listArea.add(areaName);
-                        listAreaId.add("all");
-                        listAreaId.add(areaId);
-                        JSONArray areaList = jsonArray.getJSONArray(1);
-                            for(int j = 1; j < areaList.length();j++){
-                                   if(j % 2 == 0) {
-                                       String areaName2 = areaList.getString(j);
-                                       listArea.add(areaName2);
-                                   }
-                                   else{
-                                       String areaId2 = areaList.getString(j);
-                                       listAreaId.add(areaId2);
-                                   }
+                String Status = response.optString("status");
+                String AreaId = response.optString("AreaId");
+                String AreaName = response.optString("AreaName");
+                String isAreaPusat = response.optString("isAreaPusat");
+                String UserId = response.optString("UserId");
+                String UserName = response.optString("UserName");
+                String ClientId = response.optString("ClientId");
+                String Client = response.optString("Client");
+                String ClientLogo = response.optString("ClientLogo");
+                String PegawaiId = response.optString("PegawaiId");
+                String PegawaiName = response.optString("PegawaiName");
+                String PegawaiAlias = response.optString("PegawaiAlias");
+                try {
+                    JSONArray jsonArray = response.getJSONArray("list_area");
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String areaName = jsonObject.optString("area_name");
+                    String areaId = jsonObject.optString("area_id");
+                    listArea.add("All Cabang");
+                    listArea.add(areaName);
+                    listAreaId.add("all");
+                    listAreaId.add(areaId);
+                    JSONArray areaList = jsonArray.getJSONArray(1);
+                    for (int j = 1; j < areaList.length(); j++) {
+                        if (j % 2 == 0) {
+                            String areaName2 = areaList.getString(j);
+                            listArea.add(areaName2);
+                        } else {
+                            String areaId2 = areaList.getString(j);
+                            listAreaId.add(areaId2);
                         }
-                      } catch (JSONException e) {
-                    e.printStackTrace();
                     }
-                      ClientLogin clientLogin = new ClientLogin(Status,AreaId,AreaName,isAreaPusat,UserId,UserName,ClientId,Client,ClientLogo,PegawaiId,PegawaiName,PegawaiAlias,listArea,listAreaId);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                ClientLogin clientLogin = new ClientLogin(Status, AreaId, AreaName, isAreaPusat, UserId, UserName, ClientId, Client, ClientLogo, PegawaiId, PegawaiName, PegawaiAlias, listArea, listAreaId);
 
-                      if (Status.equals("success") && !AreaId.equals("null")){
-                          //Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_LONG).show();
-                          Intent intent = new Intent(Login.this, Dashboard.class);
-                          startActivity(intent);
-                          finish();
-                      }
-                      else{
-                          Toast.makeText(getApplicationContext(),"username or password is incorrect", Toast.LENGTH_SHORT).show();
-                      }
+                if (Status.equals("success") && !AreaId.equals("null")) {
+                    //Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Login.this, Dashboard.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "username or password is incorrect", Toast.LENGTH_SHORT).show();
+                }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext()," Username or Password is incorrect", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), " Username or Password is incorrect", Toast.LENGTH_LONG).show();
             }
-        });
+        })
+        {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Cookie",ClientNo.cookiesKey[0]);
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
 
         requestQueue.add(jsonObjectRequest);
-    };
+    }
 
 
     public void AnotherAcc(View view) {
