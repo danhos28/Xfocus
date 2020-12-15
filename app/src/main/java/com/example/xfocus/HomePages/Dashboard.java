@@ -33,6 +33,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
+import com.example.xfocus.Header;
 import com.example.xfocus.R;
 import com.example.xfocus.StartPages.ClientNo;
 import com.github.mikephil.charting.charts.PieChart;
@@ -292,6 +293,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
                             Log.e("getHeader: ", "label: " + label +"persen: "+ persen+"urut: "+urut+"value: "+value
                             +"header: "+  list_header);
+                            Header header = new Header(label,persen,urut,value,list_header);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
