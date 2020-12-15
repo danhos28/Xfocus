@@ -30,7 +30,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.R;
@@ -41,6 +41,10 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,6 +68,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_area = new ArrayList<>();
     ArrayList<String> list_tampilan = new ArrayList<>();
     ArrayList<String> list_periode = new ArrayList<>();
+    ArrayList<String> list_header = new ArrayList<>();
 
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
@@ -268,13 +273,28 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     public void GetDefaultResult(){
         String url ="https://xfocus.id/dashboard/getHeader?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(String response) {
-                        String data = response.toString();
-                        Toast.makeText(getApplicationContext(), "success: "+data, Toast.LENGTH_LONG).show();
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            String label = jsonObject.optString("label");
+                            String persen = jsonObject.optString("persen");
+                            String urut = jsonObject.optString("urut");
+                            String value = jsonObject.optString("value");
 
+                            JSONArray listHeader = response.getJSONArray(1);
+                            for(int i=0; i<listHeader.length();i++){
+                                String header = listHeader.getString(i);
+                                list_header.add(header);
+                            }
+                            Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
+                            Log.e("getHeader: ", "label: " + label +"persen: "+ persen+"urut: "+urut+"value: "+value
+                            +"header: "+  list_header);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -289,15 +309,15 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Cookie","xfocus_session=7a8d71de8b71a488850735fca5c0b23bc1a16771");
+                headers.put("Cookie","xfocus_session=983a8ce49bab92665049159187602608c63bbe7c");
                 headers.put("Content-Type","application/json");
                 return headers;
             }
         };
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
                 15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         ));
-        requestQueue.add(stringRequest);
+        requestQueue.add(arrayRequest);
     }
 
     //Getting yesterday's date

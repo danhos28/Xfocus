@@ -126,7 +126,7 @@ public class ClientNo extends AppCompatActivity {
 
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Cookie", cookiesKey[0]);
+                //headers.put("Cookie", cookiesKey[0]);
                 headers.put("Content-Type","application/json");
                 return headers;
             }
@@ -162,7 +162,7 @@ public class ClientNo extends AppCompatActivity {
                     Cookies = responseHeaders.get("Set-Cookie");
                     Log.e("getCookies: ", Cookies);
                     cookiesKey = ClientNo.Cookies.split(";");
-                    Log.e("getCookiesKey: ", "xfocus_session=7a8d71de8b71a488850735fca5c0b23bc1a16771");
+                    Log.e("getCookiesKey: ", cookiesKey[0]);
                     return Response.success(new String(jsonString),
                             HttpHeaderParser.parseCacheHeaders(response));
                 } catch (UnsupportedEncodingException e) {
