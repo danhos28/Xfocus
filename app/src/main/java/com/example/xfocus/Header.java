@@ -33,7 +33,7 @@ public class Header {
         Urut = urut;
     }
     public static String getValue() {
-        return Urut;
+        return Value;
     }
     public static void setValue(String value){
         Value = value;
