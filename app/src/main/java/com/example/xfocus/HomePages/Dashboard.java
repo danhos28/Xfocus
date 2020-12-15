@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,14 +25,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.R;
+import com.example.xfocus.StartPages.ClientNo;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -39,6 +42,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,11 +51,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private DatePickerDialog.OnDateSetListener mDateSetListener,mDateSetListener2;
 
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
 
@@ -63,12 +68,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_area = new ArrayList<>();
     ArrayList<String> list_tampilan = new ArrayList<>();
     ArrayList<String> list_periode = new ArrayList<>();
+    ArrayList<String> list_header = new ArrayList<>();
+
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
     PieChart donutChartPersediaan, donutChartKasdanBank;
     ImageView persediaanDropImage, kasdanbankDropImage;
     String area_id, periode;
+    String label;
+
 
     boolean tappedPersediaan = false;
     boolean tappedKasdanbank = false;
@@ -78,6 +87,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
+        //Toast.makeText(getApplicationContext(), "your cookies: "+ ClientNo.cookiesKey[0], Toast.LENGTH_LONG).show();
         //Scrollview hooks
         scrollDashboard = findViewById(R.id.scrollDashboard);
 
@@ -171,7 +181,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         last_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date();
+                Date2();
             }
         });
         datelistener1();
@@ -187,13 +197,15 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(View view) {
                 GetDefaultResult();
+
+                Log.e("test2: ", ClientNo.cookiesKey[0]);
             }
         });
     }
 
     //Setting the date
     private void datelistener2() {
-        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        mDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
@@ -259,37 +271,53 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     //Getting the default result for the diagrams
     public void GetDefaultResult(){
-        String url = "https://xfocus.id/dashboard/getHeader_app";
-        final List<String> jsonResponses = new ArrayList<>();
-
-        JSONObject getData = new JSONObject();
-        try {
-            getData.put("area", area_id);
-            getData.put("firstdate", first_date);
-            getData.put("isPusat", ClientLogin.getIsAreaPusat());
-            getData.put("latedate", last_date);
-            getData.put("showby",periode);
-            getData.put("app","1");
-            getData.put("clid", ClientLogin.getClientId());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        String url ="https://xfocus.id/dashboard/getHeader?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, getData, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-            }
-        }, new Response.ErrorListener() {
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            String label = jsonObject.optString("label");
+                            String persen = jsonObject.optString("persen");
+                            String urut = jsonObject.optString("urut");
+                            String value = jsonObject.optString("value");
+
+                            JSONArray listHeader = response.getJSONArray(1);
+                            for(int i=0; i<listHeader.length();i++){
+                                String header = listHeader.getString(i);
+                                list_header.add(header);
+                            }
+                            Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
+                            Log.e("getHeader: ", "label: " + label +"persen: "+ persen+"urut: "+urut+"value: "+value
+                            +"header: "+  list_header);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
             }
-        });
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
 
-        requestQueue.add(jsonObjectRequest);
-
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Cookie","xfocus_session=983a8ce49bab92665049159187602608c63bbe7c");
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(arrayRequest);
     }
 
     //Getting yesterday's date
@@ -308,6 +336,18 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
         DatePickerDialog dialog = new DatePickerDialog(
                 Dashboard.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener,
+                year, month, day);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+    private void Date2() {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                Dashboard.this, android.R.style.Theme_Holo_Light_Dialog_MinWidth, mDateSetListener2,
                 year, month, day);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
