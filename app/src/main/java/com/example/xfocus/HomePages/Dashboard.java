@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -80,12 +81,43 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ScrollView scrollDashboard;
     PieChart donutChartPersediaan, donutChartKasdanBank;
     ImageView persediaanDropImage, kasdanbankDropImage;
-    String area_id, periode;
+    String area_id, periode = "period";
     String label;
+
+    boolean doubleBackToExitPressedOnce = false;
 
 
     boolean tappedPersediaan = false;
     boolean tappedKasdanbank = false;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        submitDashboard.performClick();
+    }
+
+    //Controlling the back button
+    @Override
+    public void onBackPressed() {
+        //For back pressed twice for quit
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finishAffinity();
+            System.exit(0);
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, " Tekan BACK lagi untuk keluar ", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +147,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         //Logo
         persediaanDropImage = findViewById(R.id.persediaanDropImage);
         kasdanbankDropImage = findViewById(R.id.kasdanbankDropImage);
+
 
         persediaanDropdown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +239,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         spinnerArea.setOnItemSelectedListener(this);
         spinnerTampilan.setOnItemSelectedListener(this);
         spinnerPeriode.setOnItemSelectedListener(this);
+
         //submit btn
         submitDashboard = findViewById(R.id.submitDashboard);
         submitDashboard.setOnClickListener(new View.OnClickListener() {
@@ -420,10 +454,19 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         //pieData.setDrawValues(true);
 
         pieChart.setData(pieData);
+        //Setting the diagram legend
+        pieChart.getLegend().setFormSize(15f);
+        pieChart.getLegend().setTextSize(15f);
+        pieChart.getLegend().setXEntrySpace(20f);
+        pieChart.getLegend().setWordWrapEnabled(true);
+        //Using percentage
         pieChart.setUsePercentValues(true);
+        //Setting the minimum angle
         pieChart.setMinAngleForSlices(15f);
+        //Disable all info
         pieChart.setDrawEntryLabels(false);
         pieChart.getDescription().setEnabled(false);
+
         pieChart.setCenterText(chartName);
     }
 
