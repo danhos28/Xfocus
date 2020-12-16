@@ -81,7 +81,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ScrollView scrollDashboard;
     PieChart donutChartPersediaan, donutChartKasdanBank;
     ImageView persediaanDropImage, kasdanbankDropImage;
-    String area_id, periode = "period";
+    String area_id = "all", periode = "period";
     String label;
 
     boolean doubleBackToExitPressedOnce = false;
