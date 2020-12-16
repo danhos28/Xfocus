@@ -59,9 +59,11 @@ import java.util.Locale;
 public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatePickerDialog.OnDateSetListener mDateSetListener,mDateSetListener2;
 
+    TextView persediaanValue, kasdanbankValue;
+
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
 
-    LinearLayout persediaanDropdown, kasdanbankDropdown;
+    LinearLayout progressDashboardBar, persediaanDropdown, kasdanbankDropdown, contentDashboard;
     CardView persediaanCard, kasdanbankCard;
     TextView first_date, last_date, username;
     Button submitDashboard;
@@ -70,6 +72,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_tampilan = new ArrayList<>();
     ArrayList<String> list_periode = new ArrayList<>();
     ArrayList<String> list_header = new ArrayList<>();
+
+    Header header;
 
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
@@ -92,11 +96,21 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         //Scrollview hooks
         scrollDashboard = findViewById(R.id.scrollDashboard);
 
+        //Hooks
+        contentDashboard = findViewById(R.id.contentDashboard);
+
+        //Progressbar hooks
+        progressDashboardBar = findViewById(R.id.progressDashboardBar);
+
         //Dropdown Hooks
         persediaanDropdown = findViewById(R.id.persediaanDropdown);
         persediaanCard = findViewById(R.id.persediaanCard);
         kasdanbankDropdown = findViewById(R.id.kasdanbankDropdown);
         kasdanbankCard = findViewById(R.id.kasdanbankCard);
+
+        //Value textview hooks
+        persediaanValue = findViewById(R.id.persediaanValue);
+        kasdanbankValue = findViewById(R.id.kasdanbankValue);
 
         //Logo
         persediaanDropImage = findViewById(R.id.persediaanDropImage);
@@ -140,7 +154,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
         //Chart setup 1
         ArrayList<PieEntry> persediaan = new ArrayList<>();
-        persediaan.add(new PieEntry(500, "Barang Jadi"));
+        persediaan.add(new PieEntry(900, "Bahan Jadi"));
         persediaan.add(new PieEntry(4500, "Bahan Baku"));
 
         setDonutCharts(persediaan, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
@@ -199,7 +213,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             public void onClick(View view) {
                 GetDefaultResult();
 
-                Log.e("test2: ", ClientNo.cookiesKey[0]);
+                //Log.e("test2: ", ClientNo.cookiesKey[0]);
             }
         });
     }
@@ -272,6 +286,14 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     //Getting the default result for the diagrams
     public void GetDefaultResult(){
+        //Controlling view
+        progressDashboardBar.setVisibility(View.VISIBLE);
+        contentDashboard.setVisibility(View.GONE);
+        submitDashboard.setEnabled(false);
+
+        //Clear arraylist
+        list_header.clear();
+
         String url ="https://xfocus.id/dashboard/getHeader?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -293,8 +315,25 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
                             Log.e("getHeader: ", "label: " + label +"persen: "+ persen+"urut: "+urut+"value: "+value
                             +"header: "+  list_header);
-                            Header header = new Header(label,persen,urut,value,list_header);
+                            header = new Header(label,persen,urut,value,list_header);
 
+                            if (!Header.getLabel().isEmpty()){
+                                //Controlling view
+                                submitDashboard.setEnabled(true);
+                                progressDashboardBar.setVisibility(View.GONE);
+                                contentDashboard.setVisibility(View.VISIBLE);
+
+                                //Chart setup 1
+                                ArrayList<PieEntry> persediaan = new ArrayList<>();
+                                persediaan.add(new PieEntry(1200, "Bahan Jadi"));
+                                persediaan.add(new PieEntry(3800, "Bahan Baku"));
+
+                                setDonutCharts(persediaan, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
+
+                                //Value update
+                                persediaanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(4))));
+                                kasdanbankValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getValue())));
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -312,7 +351,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
             public HashMap<String, String> getHeaders() {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Cookie","xfocus_session=983a8ce49bab92665049159187602608c63bbe7c");
+                headers.put("Cookie","xfocus_session=352824d5b2a203bf173993f5407fbb3b2ded40cc");
                 headers.put("Content-Type","application/json");
                 return headers;
             }
@@ -361,7 +400,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         cardDashboard.setVisibility(View.VISIBLE);
         scrollDashboard.postDelayed(new Runnable() {
             public void run() {
-                scrollDashboard.smoothScrollTo(0, (int)cardDashboard.getY());
+                scrollDashboard.smoothScrollTo(0, (int)cardDashboard.getBottom());
                 donutChart.animateXY(1000,1000);
             }
         }, 100);

@@ -115,7 +115,7 @@ public class ClientNo extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(), " No client salah ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), " Terjadi kesalahan ", Toast.LENGTH_SHORT).show();
             }
             })
         {
