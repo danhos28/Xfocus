@@ -35,6 +35,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.Header;
+import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
 import com.example.xfocus.kasbank;
 import com.github.mikephil.charting.charts.PieChart;
@@ -74,9 +75,11 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_periode = new ArrayList<>();
     ArrayList<String> list_header = new ArrayList<>();
     ArrayList<String> list_kasbank = new ArrayList<>();
+    ArrayList<String> list_persediaan = new ArrayList<>();
 
     Header header;
     kasbank kasbank;
+    Persediaan persediaan;
 
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
@@ -287,6 +290,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             public void onClick(View view) {
                 GetDefaultResult();
                 getKasbank();
+                getPersediaan();
             }
         });
     }
@@ -385,7 +389,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 String header = listHeader.getString(i);
                                 list_header.add(header);
                             }
-                            Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
                             Log.e("getHeader: ", "label: " + label +"persen: "+ persen+"urut: "+urut+"value: "+value
                             +"header: "+  list_header);
                             header = new Header(label,persen,urut,value,list_header);
@@ -499,6 +502,53 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         requestQueue.add(arrayRequest);
     }
     //Getting yesterday's date
+    public void getPersediaan(){
+        list_persediaan.clear();
+        String url ="https://xfocus.id/dashboard/getpersediaan?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            String label = jsonObject.optString("label");
+                            String value = jsonObject.optString("value");
+
+                            JSONArray listpersediaan = response.getJSONArray(1);
+                            for(int i=0; i<listpersediaan.length();i++){
+                                String persediaan = listpersediaan.getString(i);
+                                list_persediaan.add(persediaan);
+                            }
+                            Log.e("getPersediaan: ", " label: " + label +" value: "+ value + "listpersediaan: "+  list_persediaan);
+                            persediaan = new Persediaan(label,value,list_persediaan);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Persediaan failed", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Cookie","xfocus_session=352824d5b2a203bf173993f5407fbb3b2ded40cc");
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(arrayRequest);
+    }
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -2);
