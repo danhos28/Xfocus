@@ -404,10 +404,24 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 setDonutCharts(persediaan, ColorTemplate.PASTEL_COLORS, donutChartPersediaan, "PERSEDIAAN");
 
                                 //Value update
-                                persediaanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(4))));
-                                kasdanbankValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getValue())));
-                                penjualanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(12))));
-                                pendapatanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(8))));
+                                if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")){
+                                    formatString(persediaanValue, Header.getListHeader().get(4), 1000);
+                                    formatString(kasdanbankValue, Header.getValue(),1000);
+                                    formatString(penjualanValue, Header.getListHeader().get(12),1000);
+                                    formatString(pendapatanValue, Header.getListHeader().get(8),1000);
+                                }
+                                else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")){
+                                    formatString(persediaanValue, Header.getListHeader().get(4), 1000000);
+                                    formatString(kasdanbankValue, Header.getValue(),1000000);
+                                    formatString(penjualanValue, Header.getListHeader().get(12),1000000);
+                                    formatString(pendapatanValue, Header.getListHeader().get(8),1000000);
+                                }
+                                else{
+                                    formatString(persediaanValue, Header.getListHeader().get(4), 1);
+                                    formatString(kasdanbankValue, Header.getValue(),1);
+                                    formatString(penjualanValue, Header.getListHeader().get(12),1);
+                                    formatString(pendapatanValue, Header.getListHeader().get(8),1);
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -512,14 +526,20 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     }
 
     //Set up the animation for drop down view of Charts
-    private void  animateDropDownChart(int angleA, int angleB, ImageView imageView, int rotationValue){
+    private void animateDropDownChart(int angleA, int angleB, ImageView imageView, int rotationValue){
         RotateAnimation rotate = new RotateAnimation(angleA, angleB, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(500);
         rotate.setInterpolator(new LinearInterpolator());
         imageView.startAnimation(rotate);
         imageView.setRotation(imageView.getRotation() + rotationValue);
     }
-    //on spinner's item selected
+
+    //Formatting the currency of the number imported from database
+    private void formatString(TextView textView, String value, int divided){
+        textView.setText(String.format("%1$,.2f", Double.parseDouble(value) / divided));
+    }
+
+    //On spinner's item selected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long l) {
         switch (parent.getId()){
