@@ -233,13 +233,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         donutChartPenjualan = findViewById(R.id.DonutChart3);
         donutChartPendapatan = findViewById(R.id.DonutChart4);
 
-        //Chart setup 1
-        ArrayList<PieEntry> persediaan = new ArrayList<>();
-        persediaan.add(new PieEntry(900, "Bahan Jadi"));
-        persediaan.add(new PieEntry(4500, "Bahan Baku"));
-
-        setDonutCharts(persediaan, ColorTemplate.PASTEL_COLORS, donutChartPersediaan, "PERSEDIAAN");
-
         //Chart setup 2
         ArrayList<PieEntry> kasDanBank = new ArrayList<>();
         kasDanBank.add(new PieEntry(100000, "Bank 2"));
@@ -292,9 +285,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(View view) {
                 GetDefaultResult();
-                getKasbank();
+                //getKasbank();
                 getPersediaan();
-                getPenjualan();
+                //getPenjualan();
             }
         });
     }
@@ -398,18 +391,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             header = new Header(label,persen,urut,value,list_header);
 
                             if (!Header.getLabel().isEmpty()){
-                                //Controlling view
-                                submitDashboard.setEnabled(true);
-                                progressDashboardBar.setVisibility(View.GONE);
-                                contentDashboard.setVisibility(View.VISIBLE);
-
-                                //Chart setup 1
-                                ArrayList<PieEntry> persediaan = new ArrayList<>();
-                                persediaan.add(new PieEntry(1200, "Bahan Jadi"));
-                                persediaan.add(new PieEntry(3800, "Bahan Baku"));
-
-                                setDonutCharts(persediaan, ColorTemplate.PASTEL_COLORS, donutChartPersediaan, "PERSEDIAAN");
-
                                 //Value update
                                 if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")){
                                     formatString(persediaanValue, Header.getListHeader().get(4), 1000);
@@ -505,7 +486,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         ));
         requestQueue.add(arrayRequest);
     }
-    //Getting yesterday's date
+
     public void getPersediaan(){
         list_persediaan.clear();
         String url ="https://xfocus.id/dashboard/getpersediaan?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
@@ -514,20 +495,46 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try {
-                            JSONObject jsonObject = response.getJSONObject(0);
-                            String label = jsonObject.optString("label");
-                            String value = jsonObject.optString("value");
+                        if (response.length() != 0){
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(0);
+                                String label = jsonObject.optString("label");
+                                String value = jsonObject.optString("value");
 
-                            JSONArray listpersediaan = response.getJSONArray(1);
-                            for(int i=0; i<listpersediaan.length();i++){
-                                String persediaan = listpersediaan.getString(i);
-                                list_persediaan.add(persediaan);
+                                JSONArray listpersediaan = response.getJSONArray(1);
+                                for(int i=0; i<listpersediaan.length();i++){
+                                    String persediaan = listpersediaan.getString(i);
+                                    list_persediaan.add(persediaan);
+                                }
+                                Log.e("getPersediaan: ", " label: " + label +" value: "+ value + "listpersediaan: "+  list_persediaan);
+                                persediaan = new Persediaan(label,value,list_persediaan);
+
+                                if (!Persediaan.getLabel().isEmpty()){
+                                    //Chart setup 1
+                                    ArrayList<PieEntry> persediaan = new ArrayList<>();
+                                    persediaan.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel()));
+                                    for(int i=1; i < Persediaan.getListPersediaan().size(); i+=2){
+                                        persediaan.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i+1)), Persediaan.getListPersediaan().get(i)));
+                                    }
+
+                                    setDonutCharts(persediaan, ColorTemplate.COLORFUL_COLORS, donutChartPersediaan, "PERSEDIAAN");
+
+                                    //Controlling view
+                                    submitDashboard.setEnabled(true);
+                                    progressDashboardBar.setVisibility(View.GONE);
+                                    contentDashboard.setVisibility(View.VISIBLE);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            Log.e("getPersediaan: ", " label: " + label +" value: "+ value + "listpersediaan: "+  list_persediaan);
-                            persediaan = new Persediaan(label,value,list_persediaan);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        }
+                        else{
+                            //Controlling view
+                            submitDashboard.setEnabled(true);
+                            progressDashboardBar.setVisibility(View.GONE);
+                            contentDashboard.setVisibility(View.VISIBLE);
+                            donutChartPersediaan.clear();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -602,6 +609,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         ));
         requestQueue.add(arrayRequest);
     }
+
+    //Getting yesterday's date
     private Date yesterday() {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -2);
