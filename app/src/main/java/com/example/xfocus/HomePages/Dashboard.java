@@ -60,12 +60,12 @@ import java.util.Locale;
 public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatePickerDialog.OnDateSetListener mDateSetListener,mDateSetListener2;
 
-    TextView persediaanValue, kasdanbankValue;
+    TextView persediaanValue, kasdanbankValue, penjualanValue, pendapatanValue;
 
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
 
-    LinearLayout progressDashboardBar, persediaanDropdown, kasdanbankDropdown, contentDashboard;
-    CardView persediaanCard, kasdanbankCard;
+    LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown;
+    CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard;
     TextView first_date, last_date, username;
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
@@ -79,20 +79,19 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
-    PieChart donutChartPersediaan, donutChartKasdanBank;
-    ImageView persediaanDropImage, kasdanbankDropImage;
+    PieChart donutChartPersediaan, donutChartKasdanBank, donutChartPenjualan, donutChartPendapatan;
+    ImageView persediaanDropImage, kasdanbankDropImage, penjualanDropImage, pendapatanDropImage;
     String area_id = "all", periode = "period";
     String label;
 
     boolean doubleBackToExitPressedOnce = false;
 
 
-    boolean tappedPersediaan = false;
-    boolean tappedKasdanbank = false;
+    boolean tappedPersediaan = false, tappedKasdanbank = false, tappedPenjualan = false, tappedPendapatan = false;
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart();
         submitDashboard.performClick();
     }
 
@@ -139,14 +138,22 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         persediaanCard = findViewById(R.id.persediaanCard);
         kasdanbankDropdown = findViewById(R.id.kasdanbankDropdown);
         kasdanbankCard = findViewById(R.id.kasdanbankCard);
+        penjualanDropdown = findViewById(R.id.penjualanDropdown);
+        penjualanCard = findViewById(R.id.penjualanCard);
+        pendapatanDropdown = findViewById(R.id.pendapatanDropdown);
+        pendapatanCard = findViewById(R.id.pendapatanCard);
 
         //Value textview hooks
         persediaanValue = findViewById(R.id.persediaanValue);
         kasdanbankValue = findViewById(R.id.kasdanbankValue);
+        penjualanValue = findViewById(R.id.penjualanValue);
+        pendapatanValue = findViewById(R.id.pendapatanValue);
 
-        //Logo
+        //Logo dropdown
         persediaanDropImage = findViewById(R.id.persediaanDropImage);
         kasdanbankDropImage = findViewById(R.id.kasdanbankDropImage);
+        penjualanDropImage = findViewById(R.id.penjualankDropImage);
+        pendapatanDropImage = findViewById(R.id.pendapatanDropImage);
 
 
         persediaanDropdown.setOnClickListener(new View.OnClickListener() {
@@ -181,18 +188,50 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             }
         });
 
+        penjualanDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tappedPenjualan == false){
+                    setCardVisible(penjualanCard, donutChartPenjualan);
+                    tappedPenjualan = true;
+                    animateDropDownChart(90,0,penjualanDropImage,-90);
+                }
+                else if (tappedPenjualan == true){
+                    penjualanCard.setVisibility(View.GONE);
+                    tappedPenjualan = false;
+                    animateDropDownChart(-90,0,penjualanDropImage, 90);
+                }
+            }
+        });
+
+        pendapatanDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tappedPendapatan == false){
+                    setCardVisible(pendapatanCard, donutChartPendapatan);
+                    tappedPendapatan = true;
+                    animateDropDownChart(90,0,pendapatanDropImage,-90);
+                }
+                else if (tappedPendapatan == true){
+                    pendapatanCard.setVisibility(View.GONE);
+                    tappedPendapatan = false;
+                    animateDropDownChart(-90,0,pendapatanDropImage, 90);
+                }
+            }
+        });
+
         //Donut chart in cardview
         donutChartPersediaan = findViewById(R.id.DonutChart1);
         donutChartKasdanBank = findViewById(R.id.DonutChart2);
+        donutChartPenjualan = findViewById(R.id.DonutChart3);
+        donutChartPendapatan = findViewById(R.id.DonutChart4);
 
         //Chart setup 1
         ArrayList<PieEntry> persediaan = new ArrayList<>();
         persediaan.add(new PieEntry(900, "Bahan Jadi"));
         persediaan.add(new PieEntry(4500, "Bahan Baku"));
 
-        setDonutCharts(persediaan, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
-
-        //-----------------
+        setDonutCharts(persediaan, ColorTemplate.PASTEL_COLORS, donutChartPersediaan, "PERSEDIAAN");
 
         //Chart setup 2
         ArrayList<PieEntry> kasDanBank = new ArrayList<>();
@@ -203,7 +242,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         kasDanBank.add(new PieEntry(100, "Kas Kecil"));
         kasDanBank.add(new PieEntry(50, "Bank 3"));
 
-        setDonutCharts(kasDanBank, ColorTemplate.MATERIAL_COLORS, donutChartKasdanBank, "KAS DAN BANK");
+        setDonutCharts(kasDanBank, ColorTemplate.JOYFUL_COLORS, donutChartKasdanBank, "KAS DAN BANK");
 
         //Toolbar dashboard
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -362,11 +401,13 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 persediaan.add(new PieEntry(1200, "Bahan Jadi"));
                                 persediaan.add(new PieEntry(3800, "Bahan Baku"));
 
-                                setDonutCharts(persediaan, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
+                                setDonutCharts(persediaan, ColorTemplate.PASTEL_COLORS, donutChartPersediaan, "PERSEDIAAN");
 
                                 //Value update
                                 persediaanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(4))));
                                 kasdanbankValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getValue())));
+                                penjualanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(12))));
+                                pendapatanValue.setText(String.format("%1$,.2f", Double.parseDouble(Header.getListHeader().get(8))));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -434,7 +475,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         cardDashboard.setVisibility(View.VISIBLE);
         scrollDashboard.postDelayed(new Runnable() {
             public void run() {
-                scrollDashboard.smoothScrollTo(0, (int)cardDashboard.getBottom());
+                scrollDashboard.smoothScrollTo(0, (int) (cardDashboard.getY() + cardDashboard.getHeight() / 2));
                 donutChart.animateXY(1000,1000);
             }
         }, 100);
