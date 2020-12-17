@@ -35,6 +35,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.Header;
+import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
 import com.example.xfocus.kasbank;
@@ -76,10 +77,12 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_header = new ArrayList<>();
     ArrayList<String> list_kasbank = new ArrayList<>();
     ArrayList<String> list_persediaan = new ArrayList<>();
+    ArrayList<String> list_penjualan = new ArrayList<>();
 
     Header header;
     kasbank kasbank;
     Persediaan persediaan;
+    Penjualan penjualan;
 
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
@@ -291,6 +294,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 GetDefaultResult();
                 getKasbank();
                 getPersediaan();
+                getPenjualan();
             }
         });
     }
@@ -530,6 +534,55 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), "Persediaan failed", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Cookie","xfocus_session=352824d5b2a203bf173993f5407fbb3b2ded40cc");
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(arrayRequest);
+    }
+
+    public void getPenjualan(){
+        list_penjualan.clear();
+        String url ="https://xfocus.id/dashboard/getpenjualan?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(0);
+                            String label = jsonObject.optString("label");
+                            String urut = jsonObject.optString("urut");
+                            String value = jsonObject.optString("value");
+
+                            JSONArray listpenjualan = response.getJSONArray(1);
+                            for(int i=0; i<listpenjualan.length();i++){
+                                String penjualan = listpenjualan.getString(i);
+                                list_penjualan.add(penjualan);
+                            }
+                            Log.e("getPenjualan: ", " label: " + label +" urut: "+urut+ " value: "+ value+ "listpenjualan: "+  list_penjualan);
+                            penjualan = new Penjualan(label,urut,value,list_penjualan);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Penjualan failed", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
