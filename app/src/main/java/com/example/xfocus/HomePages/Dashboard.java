@@ -446,6 +446,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        if (response.length() != 0){
                         try {
                             JSONObject jsonObject = response.getJSONObject(0);
                             String label = jsonObject.optString("label");
@@ -461,6 +462,14 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             kasbank = new kasbank(label,value,list_kasbank);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                        }
+                        }
+                        else{
+                            //Controlling view
+                            submitDashboard.setEnabled(true);
+                            progressDashboardBar.setVisibility(View.GONE);
+                            contentDashboard.setVisibility(View.VISIBLE);
+                            donutChartPersediaan.clear();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -569,21 +578,30 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try {
-                            JSONObject jsonObject = response.getJSONObject(0);
-                            String label = jsonObject.optString("label");
-                            String urut = jsonObject.optString("urut");
-                            String value = jsonObject.optString("value");
+                        if (response.length() != 0) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(0);
+                                String label = jsonObject.optString("label");
+                                String urut = jsonObject.optString("urut");
+                                String value = jsonObject.optString("value");
 
-                            JSONArray listpenjualan = response.getJSONArray(1);
-                            for(int i=0; i<listpenjualan.length();i++){
-                                String penjualan = listpenjualan.getString(i);
-                                list_penjualan.add(penjualan);
+                                JSONArray listpenjualan = response.getJSONArray(1);
+                                for (int i = 0; i < listpenjualan.length(); i++) {
+                                    String penjualan = listpenjualan.getString(i);
+                                    list_penjualan.add(penjualan);
+                                }
+                                Log.e("getPenjualan: ", " label: " + label + " urut: " + urut + " value: " + value + "listpenjualan: " + list_penjualan);
+                                penjualan = new Penjualan(label, urut, value, list_penjualan);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            Log.e("getPenjualan: ", " label: " + label +" urut: "+urut+ " value: "+ value+ "listpenjualan: "+  list_penjualan);
-                            penjualan = new Penjualan(label,urut,value,list_penjualan);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        }
+                        else{
+                            //Controlling view
+                            submitDashboard.setEnabled(true);
+                            progressDashboardBar.setVisibility(View.GONE);
+                            contentDashboard.setVisibility(View.VISIBLE);
+                            donutChartPersediaan.clear();
                         }
                     }
                 }, new Response.ErrorListener() {
