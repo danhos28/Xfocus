@@ -19,6 +19,6 @@ public class kasbank {
     public static void setValue(String value){
         Value = value;
     }
-    public static ArrayList<String> getListHeader() { return ListKasbank; }
+    public static ArrayList<String> getListKasbank() { return ListKasbank; }
     public static void setListKasbank(ArrayList<String> listKasbank) { ListKasbank = listKasbank; }
 }

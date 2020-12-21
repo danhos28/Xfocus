@@ -35,6 +35,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.Header;
+import com.example.xfocus.HutangPiutang;
+import com.example.xfocus.LabaRugi;
+import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
@@ -83,6 +86,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     kasbank kasbank;
     Persediaan persediaan;
     Penjualan penjualan;
+    HutangPiutang hutangPiutang;
+    PendapatanBiaya pendapatanBiaya;
+    LabaRugi labaRugi;
 
     ArrayAdapter<String> areaAdapter,tampilanAdapter,periodAdapter;
     RequestQueue requestQueue;
