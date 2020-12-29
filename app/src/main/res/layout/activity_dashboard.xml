@@ -129,37 +129,36 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="-5dp"
-                        android:fontFamily="@font/bungee"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="27sp"
                         android:text="FINANCIAL SUMMARY"
                         android:textColor="@android:color/white"
-                        android:textSize="25sp" />
+                        android:textSize="23sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"
-                        android:fontFamily="@font/muli_black"
-                        android:textColor="@android:color/white"
-                        android:text="Semua laporan financial akan ditampilkan disini, silahkan scroll" />
+                        android:fontFamily="@font/poppinsmedium"
+                        android:text="Semua laporan financial akan ditampilkan disini, silahkan scroll"
+                        android:textColor="@android:color/white" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/persediaanDropdown"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:background="#E0E0E0"
                     android:orientation="vertical">
 
@@ -174,12 +173,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/brandon_grostesque_black"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="24sp"
                         android:layout_marginTop="-30dp"
                         android:text="PERSEDIAAN"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -188,7 +187,7 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#4A148C"
+                    android:backgroundTint="#290A4E"
                     android:layout_marginTop="20dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
@@ -209,7 +208,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/bungee"
+                            android:fontFamily="@font/poppinsbold"
                             android:textColor="@android:color/white"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -218,14 +217,14 @@
                 <LinearLayout
                     android:id="@+id/kasdanbankDropdown"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:background="#E0E0E0"
                     android:orientation="vertical">
 
@@ -240,12 +239,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/brandon_grostesque_black"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="24sp"
                         android:layout_marginTop="-30dp"
                         android:text="KAS DAN BANK"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -254,7 +253,7 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#00838F"
+                    android:backgroundTint="#070707"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     app:cardElevation="10dp"
@@ -274,7 +273,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/bungee"
+                            android:fontFamily="@font/poppinsbold"
                             android:textColor="@android:color/white"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -283,14 +282,14 @@
                 <LinearLayout
                     android:id="@+id/penjualanDropdown"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:background="#E0E0E0"
                     android:orientation="vertical">
 
@@ -305,12 +304,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/brandon_grostesque_black"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="24sp"
                         android:layout_marginTop="-30dp"
                         android:text="PENJUALAN"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -319,7 +318,7 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#388E3C"
+                    android:backgroundTint="#1C571F"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     app:cardElevation="10dp"
@@ -339,7 +338,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/bungee"
+                            android:fontFamily="@font/poppinsbold"
                             android:textColor="@android:color/white"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -348,14 +347,14 @@
                 <LinearLayout
                     android:id="@+id/hutangpiutangDropdown"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:background="#E0E0E0"
                     android:orientation="vertical">
 
@@ -370,25 +369,25 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/brandon_grostesque_black"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="24sp"
                         android:layout_marginTop="-30dp"
                         android:text="HUTANG PIUTANG"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/pendapatanDropdown"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:background="#E0E0E0"
                     android:orientation="vertical">
 
@@ -403,12 +402,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/brandon_grostesque_black"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="24sp"
                         android:layout_marginTop="-30dp"
                         android:text="PENDAPATAN DAN BIAYA"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView
@@ -416,7 +415,7 @@
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#880E4F"
+                    android:backgroundTint="#880F0F"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     app:cardElevation="10dp"
@@ -436,7 +435,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/bungee"
+                            android:fontFamily="@font/poppinsbold"
                             android:textColor="@android:color/white"
                             android:textSize="20sp" />
                     </LinearLayout>
@@ -445,14 +444,14 @@
                 <LinearLayout
                     android:id="@+id/labaDropdown"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
+                    android:layout_height="65dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
-                    android:padding="20dp"
+                    android:padding="18dp"
                     android:background="#E0E0E0"
                     android:orientation="vertical">
 
@@ -467,12 +466,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/brandon_grostesque_black"
+                        android:fontFamily="@font/poppinsbold"
                         android:lineHeight="24sp"
                         android:layout_marginTop="-30dp"
                         android:text="LABA RUGI"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -496,8 +495,8 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <ProgressBar
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:indeterminateTint="@android:color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

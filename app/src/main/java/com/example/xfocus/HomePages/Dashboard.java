@@ -36,12 +36,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.Header;
 import com.example.xfocus.HutangPiutang;
+import com.example.xfocus.Kasbank;
 import com.example.xfocus.LabaRugi;
 import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
-import com.example.xfocus.Kasbank;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -73,7 +73,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown;
     CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard;
-    TextView first_date, last_date, username;
+    TextView first_date, last_date, username, areaname;
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
     ArrayList<String> list_area = new ArrayList<>();
@@ -257,6 +257,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         last_date = findViewById(R.id.last_date);
         requestQueue = Volley.newRequestQueue(this);
         username = findViewById(R.id.NamaUser);
+        areaname = findViewById(R.id.NamaArea);
         //Spinner dashboard
         spinnerArea = findViewById(R.id.spinnerArea);
         spinnerPeriode = findViewById(R.id.spinnerPeriode);
@@ -278,6 +279,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         datelistener1();
         datelistener2();
         username.setText(ClientLogin.getUserName());
+        areaname.setText(ClientLogin.getAreaName());
         //spinner
         spinnerArea.setOnItemSelectedListener(this);
         spinnerTampilan.setOnItemSelectedListener(this);
@@ -462,7 +464,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 String kasdanbank = listkasbank.getString(i);
                                 list_kasbank.add(kasdanbank);
                             }
-                            Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
                             Log.e("getKasbank: ", " label: " + label +" value: "+ value + "listkasbank: "+  list_kasbank);
                             kasbank = new Kasbank(label,value,list_kasbank);
 
@@ -813,22 +814,27 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         PieData pieData = new PieData(pieDataSet);
         pieData.setValueFormatter(new PercentFormatter(pieChart));
         //pieData.setDrawValues(true);
-
         pieChart.setData(pieData);
         //Setting the diagram legend
         pieChart.getLegend().setFormSize(15f);
         pieChart.getLegend().setTextSize(15f);
         pieChart.getLegend().setXEntrySpace(20f);
         pieChart.getLegend().setWordWrapEnabled(true);
+        //pieChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        //pieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        //pieChart.getLegend().setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+        //pieChart.getLegend().setOrientation(Legend.LegendOrientation.VERTICAL);
+        //pieChart.getLegend().setDrawInside(false);
         //Using percentage
         pieChart.setUsePercentValues(true);
         //Setting the minimum angle
         pieChart.setMinAngleForSlices(15f);
         //Disable all info
         pieChart.setDrawEntryLabels(false);
+        pieChart.getData().setDrawValues(false);
         pieChart.getDescription().setEnabled(false);
-
         pieChart.setCenterText(chartName);
+
     }
 
     //Set up the animation for drop down view of Charts
