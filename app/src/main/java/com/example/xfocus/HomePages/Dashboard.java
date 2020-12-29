@@ -83,6 +83,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_kasbank = new ArrayList<>();
     ArrayList<String> list_persediaan = new ArrayList<>();
     ArrayList<String> list_penjualan = new ArrayList<>();
+    ArrayList<String> list_pendapatan = new ArrayList<>();
     int[] diagramColors = {Color.rgb(229, 57, 53), Color.rgb(255, 204, 128  ),
                             Color.rgb(156, 39, 176), Color.rgb(234, 128, 252), Color.rgb(77, 208, 225),
                             Color.rgb(217, 80, 138), Color.rgb(254, 149, 7), Color.rgb(254, 247, 120),
@@ -291,6 +292,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 getKasbank();
                 getPersediaan();
                 getPenjualan();
+                getPendapatanBiaya();
             }
         });
     }
@@ -654,6 +656,81 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             progressDashboardBar.setVisibility(View.GONE);
                             contentDashboard.setVisibility(View.VISIBLE);
                             donutChartPenjualan.clear();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Penjualan failed", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Cookie","xfocus_session=352824d5b2a203bf173993f5407fbb3b2ded40cc");
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(arrayRequest);
+    }
+
+    //Get pendapatan dan biaya
+    public void getPendapatanBiaya(){
+        list_pendapatan.clear();
+        String url ="https://xfocus.id/dashboard/getpendapatanbiaya?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if (response.length() != 0) {
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(0);
+                                String label = jsonObject.optString("label");
+                                String tipe = jsonObject.optString("tipe");
+                                String value = jsonObject.optString("value");
+
+                                JSONArray listpendapatanbiaya = response.getJSONArray(1);
+                                for (int i = 0; i < listpendapatanbiaya.length(); i++) {
+                                    String pendapatan = listpendapatanbiaya.getString(i);
+                                    list_pendapatan.add(pendapatan);
+                                }
+                                Log.e("getPendapatanBiaya: ", " label: " + label + " tipe: " + tipe + " value: " + value + "listpendapatan: " + list_pendapatan);
+                                pendapatanBiaya = new PendapatanBiaya(label, tipe, value, list_pendapatan);
+
+                                if (!PendapatanBiaya.getLabel().isEmpty()){
+                                    //Chart setup 2
+                                    ArrayList<PieEntry> pend = new ArrayList<>();
+                                    pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getValue())), PendapatanBiaya.getLabel()));
+                                    for(int i = 1; i < PendapatanBiaya.getListPendapatanBiaya().size(); i+=3){
+                                        pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i+2))), PendapatanBiaya.getListPendapatanBiaya().get(i)));
+                                    }
+
+                                    setDonutCharts(pend, diagramColors, donutChartPendapatan, "PENDAPATAN");
+
+                                    //Controlling view
+                                    submitDashboard.setEnabled(true);
+                                    progressDashboardBar.setVisibility(View.GONE);
+                                    contentDashboard.setVisibility(View.VISIBLE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            //Controlling view
+                            submitDashboard.setEnabled(true);
+                            progressDashboardBar.setVisibility(View.GONE);
+                            contentDashboard.setVisibility(View.VISIBLE);
+                            donutChartPendapatan.clear();
                         }
                     }
                 }, new Response.ErrorListener() {
