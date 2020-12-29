@@ -41,7 +41,7 @@ import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
-import com.example.xfocus.kasbank;
+import com.example.xfocus.Kasbank;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -81,9 +81,15 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_kasbank = new ArrayList<>();
     ArrayList<String> list_persediaan = new ArrayList<>();
     ArrayList<String> list_penjualan = new ArrayList<>();
+    int[] diagramColors = {Color.rgb(229, 57, 53), Color.rgb(255, 204, 128  ),
+                            Color.rgb(156, 39, 176), Color.rgb(234, 128, 252), Color.rgb(77, 208, 225),
+                            Color.rgb(217, 80, 138), Color.rgb(254, 149, 7), Color.rgb(254, 247, 120),
+                            Color.rgb(106, 167, 134), Color.rgb(53, 194, 209), Color.rgb(0, 96, 100),
+                            Color.rgb(100, 255, 218), Color.rgb(100, 255, 218 ), Color.rgb(253, 216, 53 ),
+                            Color.rgb(255, 171, 145)};
 
     Header header;
-    kasbank kasbank;
+    Kasbank kasbank;
     Persediaan persediaan;
     Penjualan penjualan;
     HutangPiutang hutangPiutang;
@@ -239,17 +245,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         donutChartPenjualan = findViewById(R.id.DonutChart3);
         donutChartPendapatan = findViewById(R.id.DonutChart4);
 
-        //Chart setup 2
-        ArrayList<PieEntry> kasDanBank = new ArrayList<>();
-        kasDanBank.add(new PieEntry(100000, "Bank 2"));
-        kasDanBank.add(new PieEntry(50000, "Coba Bank"));
-        kasDanBank.add(new PieEntry(39300, "Kas Sales"));
-        kasDanBank.add(new PieEntry(6000, "Bank 1"));
-        kasDanBank.add(new PieEntry(100, "Kas Kecil"));
-        kasDanBank.add(new PieEntry(50, "Bank 3"));
-
-        setDonutCharts(kasDanBank, ColorTemplate.JOYFUL_COLORS, donutChartKasdanBank, "KAS DAN BANK");
-
         //Toolbar dashboard
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -291,9 +286,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onClick(View view) {
                 GetDefaultResult();
-                //getKasbank();
+                getKasbank();
                 getPersediaan();
-                //getPenjualan();
+                getPenjualan();
             }
         });
     }
@@ -465,7 +460,24 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             }
                             Toast.makeText(getApplicationContext(), "success: "+label , Toast.LENGTH_LONG).show();
                             Log.e("getKasbank: ", " label: " + label +" value: "+ value + "listkasbank: "+  list_kasbank);
-                            kasbank = new kasbank(label,value,list_kasbank);
+                            kasbank = new Kasbank(label,value,list_kasbank);
+
+                            if (!Kasbank.getLabel().isEmpty()){
+                                //Chart setup 2
+                                ArrayList<PieEntry> kasB = new ArrayList<>();
+                                kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel()));
+                                for(int i = 1; i < Kasbank.getListKasbank().size(); i+=2){
+                                    kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i+1))), Kasbank.getListKasbank().get(i)));
+                                }
+
+                                setDonutCharts(kasB, diagramColors, donutChartKasdanBank, "KAS DAN BANK");
+
+                                //Controlling view
+                                submitDashboard.setEnabled(true);
+                                progressDashboardBar.setVisibility(View.GONE);
+                                contentDashboard.setVisibility(View.VISIBLE);
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -475,7 +487,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             submitDashboard.setEnabled(true);
                             progressDashboardBar.setVisibility(View.GONE);
                             contentDashboard.setVisibility(View.VISIBLE);
-                            donutChartPersediaan.clear();
+                            donutChartKasdanBank.clear();
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -526,13 +538,13 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
                                 if (!Persediaan.getLabel().isEmpty()){
                                     //Chart setup 1
-                                    ArrayList<PieEntry> persediaan = new ArrayList<>();
-                                    persediaan.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel()));
+                                    ArrayList<PieEntry> perse = new ArrayList<>();
+                                    perse.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel()));
                                     for(int i=1; i < Persediaan.getListPersediaan().size(); i+=2){
-                                        persediaan.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i+1)), Persediaan.getListPersediaan().get(i)));
+                                        perse.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i+1)), Persediaan.getListPersediaan().get(i)));
                                     }
 
-                                    setDonutCharts(persediaan, ColorTemplate.COLORFUL_COLORS, donutChartPersediaan, "PERSEDIAAN");
+                                    setDonutCharts(perse, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
 
                                     //Controlling view
                                     submitDashboard.setEnabled(true);
@@ -598,6 +610,22 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 }
                                 Log.e("getPenjualan: ", " label: " + label + " urut: " + urut + " value: " + value + "listpenjualan: " + list_penjualan);
                                 penjualan = new Penjualan(label, urut, value, list_penjualan);
+
+                                if (!Penjualan.getLabel().isEmpty()){
+                                    //Chart setup 2
+                                    ArrayList<PieEntry> penj = new ArrayList<>();
+                                    penj.add(new PieEntry(Float.parseFloat(Penjualan.getValue()), Penjualan.getLabel()));
+                                    for(int i = 1; i < Penjualan.getListPenjualan().size(); i+=3){
+                                        penj.add(new PieEntry(Float.parseFloat(Penjualan.getListPenjualan().get(i+2)), Penjualan.getListPenjualan().get(i)));
+                                    }
+
+                                    setDonutCharts(penj, diagramColors, donutChartPenjualan, "PENJUALAN");
+
+                                    //Controlling view
+                                    submitDashboard.setEnabled(true);
+                                    progressDashboardBar.setVisibility(View.GONE);
+                                    contentDashboard.setVisibility(View.VISIBLE);
+                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -607,7 +635,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                             submitDashboard.setEnabled(true);
                             progressDashboardBar.setVisibility(View.GONE);
                             contentDashboard.setVisibility(View.VISIBLE);
-                            donutChartPersediaan.clear();
+                            donutChartPenjualan.clear();
                         }
                     }
                 }, new Response.ErrorListener() {

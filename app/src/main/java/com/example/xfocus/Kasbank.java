@@ -2,11 +2,11 @@ package com.example.xfocus;
 
 import java.util.ArrayList;
 
-public class kasbank {
+public class Kasbank {
     private static String Label,Value;
     private static ArrayList<String> ListKasbank = new ArrayList();
 
-    public kasbank (String label, String value, ArrayList<String>listKasbank){
+    public Kasbank(String label, String value, ArrayList<String>listKasbank){
         this.Label = label;
         this.Value = value;
         this.ListKasbank = listKasbank;
