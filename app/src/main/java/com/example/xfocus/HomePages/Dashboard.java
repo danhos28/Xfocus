@@ -69,6 +69,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
 
+    Float totalPenjualan;
+
     LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown;
     CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard;
     TextView first_date, last_date, username;
@@ -396,7 +398,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")){
                                     formatString(persediaanValue, Header.getListHeader().get(4), 1000);
                                     formatString(kasdanbankValue, Header.getValue(),1000);
-                                    formatString(penjualanValue, Header.getListHeader().get(12),1000);
+                                    formatString(penjualanValue, Penjualan.getListPenjualan().get(12),1000);
                                     formatString(pendapatanValue, Header.getListHeader().get(8),1000);
                                 }
                                 else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")){
@@ -615,16 +617,32 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     //Chart setup 2
                                     ArrayList<PieEntry> penj = new ArrayList<>();
                                     penj.add(new PieEntry(Float.parseFloat(Penjualan.getValue()), Penjualan.getLabel()));
+                                    totalPenjualan = Float.parseFloat(Penjualan.getValue());
                                     for(int i = 1; i < Penjualan.getListPenjualan().size(); i+=3){
+                                        totalPenjualan += Float.parseFloat(Penjualan.getListPenjualan().get(i+2));
                                         penj.add(new PieEntry(Float.parseFloat(Penjualan.getListPenjualan().get(i+2)), Penjualan.getListPenjualan().get(i)));
                                     }
 
                                     setDonutCharts(penj, diagramColors, donutChartPenjualan, "PENJUALAN");
 
+                                    if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")){
+                                        formatString(penjualanValue, totalPenjualan.toString(),1000);
+                                    }
+                                    else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")){
+                                        formatString(penjualanValue, totalPenjualan.toString(),1000000);
+                                    }
+                                    else{
+                                        formatString(penjualanValue, totalPenjualan.toString(),1);
+                                    }
+
                                     //Controlling view
                                     submitDashboard.setEnabled(true);
                                     progressDashboardBar.setVisibility(View.GONE);
                                     contentDashboard.setVisibility(View.VISIBLE);
+
+                                    if (totalPenjualan == 0){
+                                        donutChartPenjualan.clear();
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
