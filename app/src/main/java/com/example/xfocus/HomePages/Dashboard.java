@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import com.example.xfocus.Header;
 import com.example.xfocus.HutangPiutang;
 import com.example.xfocus.Kasbank;
 import com.example.xfocus.LabaRugi;
+import com.example.xfocus.ListHutangAdapter;
 import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
@@ -71,8 +73,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     Float totalPenjualan;
 
-    LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown;
-    CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard;
+    ListView listhutang;
+    LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown, hutangpiutangDropdown;
+    CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard,hutangpiutangCard;
     TextView first_date, last_date, username, areaname;
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
@@ -84,6 +87,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_persediaan = new ArrayList<>();
     ArrayList<String> list_penjualan = new ArrayList<>();
     ArrayList<String> list_pendapatan = new ArrayList<>();
+    ArrayList<String> list_hutangPiutang = new ArrayList<>();
+    ArrayList<String> labelHutangPiutang = new ArrayList<>();
+    ArrayList<String> valuePiutang = new ArrayList<>();
+    ArrayList<String> valueHutang = new ArrayList<>();
     int[] diagramColors = {Color.rgb(229, 57, 53), Color.rgb(255, 204, 128  ),
                             Color.rgb(156, 39, 176), Color.rgb(234, 128, 252), Color.rgb(77, 208, 225),
                             Color.rgb(217, 80, 138), Color.rgb(254, 149, 7), Color.rgb(254, 247, 120),
@@ -103,13 +110,13 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
     PieChart donutChartPersediaan, donutChartKasdanBank, donutChartPenjualan, donutChartPendapatan;
-    ImageView persediaanDropImage, kasdanbankDropImage, penjualanDropImage, pendapatanDropImage;
+    ImageView persediaanDropImage, kasdanbankDropImage, penjualanDropImage, pendapatanDropImage, hutangpiutangDropImage;
     String area_id = "all", periode = "period";
 
     boolean doubleBackToExitPressedOnce = false;
 
 
-    boolean tappedPersediaan = false, tappedKasdanbank = false, tappedPenjualan = false, tappedPendapatan = false;
+    boolean tappedPersediaan = false, tappedKasdanbank = false, tappedPenjualan = false, tappedPendapatan = false,tappedHutang=false;
 
     @Override
     protected void onStart() {
@@ -164,6 +171,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         penjualanCard = findViewById(R.id.penjualanCard);
         pendapatanDropdown = findViewById(R.id.pendapatanDropdown);
         pendapatanCard = findViewById(R.id.pendapatanCard);
+        hutangpiutangDropdown = findViewById(R.id.hutangpiutangDropdown);
+        hutangpiutangCard = findViewById(R.id.hutangpiutangCard);
 
         //Value textview hooks
         persediaanValue = findViewById(R.id.persediaanValue);
@@ -176,7 +185,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         kasdanbankDropImage = findViewById(R.id.kasdanbankDropImage);
         penjualanDropImage = findViewById(R.id.penjualankDropImage);
         pendapatanDropImage = findViewById(R.id.pendapatanDropImage);
+        hutangpiutangDropImage = findViewById(R.id.hutangpiutangkDropImage);
 
+        //ListView hutang
+        listhutang = findViewById(R.id.listHutang);
 
         persediaanDropdown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,6 +254,22 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             }
         });
 
+        hutangpiutangDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (tappedHutang == false){
+                    setCardVisible(hutangpiutangCard, donutChartPersediaan);
+                    tappedHutang = true;
+                    animateDropDownChart(90,0,hutangpiutangDropImage,-90);
+                }
+                else if (tappedHutang == true){
+                    hutangpiutangCard.setVisibility(View.GONE);
+                    tappedHutang = false;
+                    animateDropDownChart(-90,0,hutangpiutangDropImage, 90);
+                }
+            }
+        });
+
         //Donut chart in cardview
         donutChartPersediaan = findViewById(R.id.DonutChart1);
         donutChartKasdanBank = findViewById(R.id.DonutChart2);
@@ -295,6 +323,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 getPersediaan();
                 getPenjualan();
                 getPendapatanBiaya();
+                getHutangPiutang();
             }
         });
     }
@@ -445,6 +474,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         ));
         requestQueue.add(arrayRequest);
     }
+
     public void getKasbank(){
         list_kasbank.clear();
         String url ="https://xfocus.id/dashboard/getkasbank?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
@@ -682,7 +712,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         ));
         requestQueue.add(arrayRequest);
     }
-
     //Get pendapatan dan biaya
     public void getPendapatanBiaya(){
         list_pendapatan.clear();
@@ -738,6 +767,100 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getApplicationContext(), "Penjualan failed", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            public HashMap<String, String> getHeaders() {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Cookie","xfocus_session=352824d5b2a203bf173993f5407fbb3b2ded40cc");
+                headers.put("Content-Type","application/json");
+                return headers;
+            }
+        };
+        arrayRequest.setRetryPolicy(new DefaultRetryPolicy(
+                15000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        requestQueue.add(arrayRequest);
+    }
+    //Get hutang dan piutang
+    public void getHutangPiutang(){
+        list_hutangPiutang.clear();
+        String url ="https://xfocus.id/dashboard/gethutangpiutang?area="+area_id+"&firstdate="+first_date.getText()+"&isPusat="+ClientLogin.getIsAreaPusat()+"&latedate="+last_date.getText()+"&showby="+periode;
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        if (response.length() != 0){
+                            try {
+                                JSONObject jsonObject = response.getJSONObject(0);
+                                String label = jsonObject.optString("label");
+                                String tipe = jsonObject.optString("tipe");
+                                String urut = jsonObject.optString("urut");
+                                String value = jsonObject.optString("value");
+
+                                JSONArray listhutangpiutang = response.getJSONArray(1);
+                                for(int i=0; i<listhutangpiutang.length();i++){
+                                    String hutangpiutang = listhutangpiutang.getString(i);
+                                    list_hutangPiutang.add(hutangpiutang);
+                                }
+                                Log.e("getHutangpiutang: ", " label: " + label + "tipe" + tipe+ "urut" + urut + " value: "+ value + "listhutangpiutang: "+  list_hutangPiutang);
+                                hutangPiutang = new HutangPiutang(label,tipe,urut,value,list_hutangPiutang);
+                                if (!HutangPiutang.getLabel().isEmpty()){
+                                    labelHutangPiutang.add(list_hutangPiutang.get(1));
+                                    labelHutangPiutang.add(list_hutangPiutang.get(9));
+                                    labelHutangPiutang.add(list_hutangPiutang.get(13));
+                                    labelHutangPiutang.add(list_hutangPiutang.get(25));
+                                    labelHutangPiutang.add(list_hutangPiutang.get(33));
+                                    //-------------------------------------------------
+                                    if (tipe.equals("Hutang")){
+                                        valueHutang.add(value);
+                                    }
+                                    else{
+                                        valuePiutang.add(value);
+                                    }
+                                    for(int i= 2; i<list_hutangPiutang.size();i+=4){
+                                        if (list_hutangPiutang.get(i).equals("Hutang")){
+                                            valueHutang.add(list_hutangPiutang.get(i+2));
+                                        }
+                                        else{
+                                            valuePiutang.add(list_hutangPiutang.get(i+2));
+                                        }
+                                    }
+
+                                    Log.e("HutangPiutangLabel : ", labelHutangPiutang.get(0)+ labelHutangPiutang.get(1)+ labelHutangPiutang.get(2)
+                                            + labelHutangPiutang.get(3)+ labelHutangPiutang.get(4));
+                                    Log.e("PiutangValue : ", valuePiutang.get(0)+" "+ valuePiutang.get(1)+" "+ valuePiutang.get(2)+
+                                            " "+ valuePiutang.get(3)+" "+ valuePiutang.get(4));
+                                    Log.e("HutangValue : ", valueHutang.get(0)+" "+ valueHutang.get(1)+" "+ valueHutang.get(2)+
+                                            " "+ valueHutang.get(3)+" "+ valueHutang.get(4));
+                                    ListHutangAdapter listHutangAdapter = new ListHutangAdapter(Dashboard.this, labelHutangPiutang, valueHutang,valuePiutang);
+                                    listhutang.setAdapter(listHutangAdapter);
+                                    //Controlling view
+                                    submitDashboard.setEnabled(true);
+                                    progressDashboardBar.setVisibility(View.GONE);
+                                    contentDashboard.setVisibility(View.VISIBLE);
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else{
+                            //Controlling view
+                            submitDashboard.setEnabled(true);
+                            progressDashboardBar.setVisibility(View.GONE);
+                            contentDashboard.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "HutangPiutang failed", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override

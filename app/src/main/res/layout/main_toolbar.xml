@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:fontFamily="@font/poppinsmedium"
+            android:fontFamily="@font/poppinsbold"
             android:text="Area"
             android:textColor="#ffff64"
             android:textSize="14sp"

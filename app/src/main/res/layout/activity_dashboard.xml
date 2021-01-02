@@ -377,6 +377,48 @@
                         android:textSize="18sp" />
                 </LinearLayout>
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/hutangpiutangCard"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#F3F3F3"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="20dp"
+                    app:cardElevation="10dp"
+                    app:cardCornerRadius="10dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="450dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="#DADADA"
+                            android:padding="10dp">
+                            <TextView
+                                android:layout_width="165dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="15dp"
+                                android:text="HUTANG"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="15dp"
+                                android:text="PIUTANG"/>
+                        </LinearLayout>
+                        <ListView
+                            android:id="@+id/listHutang"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
                 <LinearLayout
                     android:id="@+id/pendapatanDropdown"
                     android:layout_width="match_parent"
