@@ -2,7 +2,6 @@ package com.example.xfocus.HomePages;
 
 import android.app.DatePickerDialog;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,33 +47,23 @@ import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -539,8 +528,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 if (!Kasbank.getLabel().isEmpty()) {
                                     //Chart setup 2
                                     ArrayList<PieEntry> kasB = new ArrayList<>();
+                                    if (Float.parseFloat(value)==0){
+                                        kasB.add(new PieEntry(1, Kasbank.getLabel()));
+                                    }
+                                    else
                                     kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel()));
                                     for (int i = 1; i < Kasbank.getListKasbank().size(); i += 2) {
+                                        if (Float.parseFloat(Kasbank.getListKasbank().get(i+1))==0){
+                                            kasB.add(new PieEntry(1, Kasbank.getListKasbank().get(i)));
+                                        }
+                                        else
                                         kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i)));
                                     }
 
@@ -604,8 +601,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 if (!Persediaan.getLabel().isEmpty()) {
                                     //Chart setup 1
                                     ArrayList<PieEntry> perse = new ArrayList<>();
+                                    if (Float.parseFloat(value)==0){
+                                        perse.add(new PieEntry(1, Persediaan.getLabel()));
+                                    }
+                                    else
                                     perse.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel()));
                                     for (int i = 1; i < Persediaan.getListPersediaan().size(); i += 2) {
+                                       if(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)) == 0){
+                                           perse.add(new PieEntry(1, Persediaan.getListPersediaan().get(i)));
+                                       }
+                                       else
                                         perse.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)), Persediaan.getListPersediaan().get(i)));
                                     }
 
@@ -678,11 +683,20 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 if (!Penjualan.getLabel().isEmpty()) {
                                     //Chart setup 2
                                     ArrayList<PieEntry> penj = new ArrayList<>();
-                                    penj.add(new PieEntry(Float.parseFloat(Penjualan.getValue()), Penjualan.getLabel()));
-                                    totalPenjualan = Float.parseFloat(Penjualan.getValue());
+                                    if(Float.parseFloat(value) == 0){
+                                        penj.add(new PieEntry(1, Penjualan.getLabel()));
+                                    }
+                                    else
+                                        penj.add(new PieEntry(Float.parseFloat(Penjualan.getValue()), Penjualan.getLabel()));
+                                        totalPenjualan = Float.parseFloat(Penjualan.getValue());
                                     for (int i = 1; i < Penjualan.getListPenjualan().size(); i += 3) {
-                                        totalPenjualan += Float.parseFloat(Penjualan.getListPenjualan().get(i + 2));
-                                        penj.add(new PieEntry(Float.parseFloat(Penjualan.getListPenjualan().get(i + 2)), Penjualan.getListPenjualan().get(i)));
+                                        if (Float.parseFloat(Penjualan.getListPenjualan().get(i+2))==0) {
+                                            penj.add(new PieEntry(1, Penjualan.getListPenjualan().get(i)));
+                                        }
+                                        else{
+                                            totalPenjualan += Float.parseFloat(Penjualan.getListPenjualan().get(i + 2));
+                                            penj.add(new PieEntry(Float.parseFloat(Penjualan.getListPenjualan().get(i + 2)), Penjualan.getListPenjualan().get(i)));
+                                        }
                                     }
 
                                     setDonutCharts(penj, diagramColors, donutChartPenjualan, "PENJUALAN");
@@ -694,7 +708,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     } else {
                                         formatString(penjualanValue, totalPenjualan.toString(), 1);
                                     }
-
 
                                     if (totalPenjualan == 0) {
                                         donutChartPenjualan.clear();
@@ -759,8 +772,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 if (!PendapatanBiaya.getLabel().isEmpty()) {
                                     //Chart setup 2
                                     ArrayList<PieEntry> pend = new ArrayList<>();
+                                    if (Float.parseFloat(value)==0){
+                                        pend.add(new PieEntry(1, PendapatanBiaya.getLabel()));
+                                    }
+                                    else
                                     pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getValue())), PendapatanBiaya.getLabel()));
                                     for (int i = 1; i < PendapatanBiaya.getListPendapatanBiaya().size(); i += 3) {
+                                        if(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i+2))==0){
+                                            pend.add(new PieEntry(1,PendapatanBiaya.getListPendapatanBiaya().get(i)));
+                                        }
+                                        else
                                         pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i + 2))), PendapatanBiaya.getListPendapatanBiaya().get(i)));
                                     }
 
@@ -832,16 +853,17 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     labelHutangPiutang.add(list_hutangPiutang.get(25));
                                     labelHutangPiutang.add(list_hutangPiutang.get(33));
                                     //-------------------------------------------------
+                                    //formatString(persediaanValue, Header.getListHeader().get(4), 1000);
                                     if (tipe.equals("Hutang")) {
-                                        valueHutang.add(value);
+                                        valueHutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(value)));
                                     } else {
-                                        valuePiutang.add(value);
+                                        valuePiutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(value)));
                                     }
                                     for (int i = 2; i < list_hutangPiutang.size(); i += 4) {
                                         if (list_hutangPiutang.get(i).equals("Hutang")) {
-                                            valueHutang.add(list_hutangPiutang.get(i + 2));
+                                            valueHutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
                                         } else {
-                                            valuePiutang.add(list_hutangPiutang.get(i + 2));
+                                            valuePiutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
                                         }
                                     }
 
@@ -860,9 +882,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 e.printStackTrace();
                             }
                         } else {
-                            labelHutangPiutang.add("Error");
-                            valueHutang.add("Error loading hutang");
-                            valuePiutang.add("Error loading piutang");
+                            labelHutangPiutang.add("Error No Data");
                             listHutangAdapter = new ListHutangAdapter(Dashboard.this, labelHutangPiutang, valueHutang, valuePiutang);
                             listhutang.setAdapter(listHutangAdapter);
                         }
