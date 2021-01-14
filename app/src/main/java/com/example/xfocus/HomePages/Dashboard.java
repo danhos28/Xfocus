@@ -874,6 +874,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     Log.e("HutangValue : ", valueHutang.get(0) + " " + valueHutang.get(1) + " " + valueHutang.get(2) +
                                             " " + valueHutang.get(3) + " " + valueHutang.get(4));
                                     listHutangAdapter = new ListHutangAdapter(Dashboard.this, labelHutangPiutang, valueHutang, valuePiutang);
+                                    
                                     listhutang.setNestedScrollingEnabled(true);
                                     listhutang.setAdapter(listHutangAdapter);
                                 }

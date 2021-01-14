@@ -22,6 +22,7 @@ import com.example.xfocus.Client;
 import com.example.xfocus.ClientLogin;
 import com.example.xfocus.HomePages.Dashboard;
 import com.example.xfocus.R;
+import com.example.xfocus.SessionManagerClass.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -116,7 +117,12 @@ public class Login extends AppCompatActivity {
                 ClientLogin clientLogin = new ClientLogin(Status, AreaId, AreaName, isAreaPusat, UserId, UserName, ClientId, Client, ClientLogo, PegawaiId, PegawaiName, PegawaiAlias, listArea, listAreaId);
 
                 if (Status.equals("success") && !AreaId.equals("null")) {
-                    //Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_LONG).show();
+                    //Saving user session
+                    SessionManager sessionManager = new SessionManager(Login.this);
+                    sessionManager.createLoginSession(Status, AreaId, AreaName, isAreaPusat, UserId, UserName, ClientId, Client, ClientLogo, PegawaiId, PegawaiName, PegawaiAlias, listArea, listAreaId);
+                    sessionManager.UserLoggedIn();
+
+                    //Go to dashboard after loggin
                     Intent intent = new Intent(Login.this, Dashboard.class);
                     startActivity(intent);
                     finish();

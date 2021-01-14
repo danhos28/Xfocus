@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ClientLogin {
     private static String Status, AreaId, AreaName, isAreaPusat, UserId, UserName, ClientId, Client, ClientLogo, PegawaiId, PegawaiName, PegawaiAlias;
-    private static ArrayList<String> listArea = new ArrayList();
+    private static ArrayList<String> listArea = new ArrayList<>();
     private static ArrayList<String> listAreaId = new ArrayList<>();
 
     public ClientLogin (String Status, String AreaId, String AreaName, String isAreaPusat, String UserId, String UserName, String ClientId, String Client, String ClientLogo, String PegawaiId, String PegawaiName, String PegawaiAlias, ArrayList<String> listArea,ArrayList<String> listAreaId)
