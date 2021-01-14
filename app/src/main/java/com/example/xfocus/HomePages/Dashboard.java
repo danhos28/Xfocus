@@ -45,6 +45,7 @@ import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
+import com.example.xfocus.SliceDialog;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -55,6 +56,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
@@ -73,14 +76,11 @@ import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatePickerDialog.OnDateSetListener mDateSetListener, mDateSetListener2;
-
+    public static String SliceValue, SliceLabel;
     TextView persediaanValue, kasdanbankValue, penjualanValue, pendapatanValue;
-
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
-
     ListHutangAdapter listHutangAdapter;
     Float totalPenjualan;
-
     ListView listhutang;
     LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown, hutangpiutangDropdown, labarugiDropdown;
     CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard, hutangpiutangCard, labarugiCard;
@@ -347,17 +347,85 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         submitDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetDefaultResult();
+                getPersediaan();
                 getKasbank();
                 getPenjualan();
                 getPendapatanBiaya();
                 getLabaRugi();
                 getHutangPiutang();
-                getPersediaan();
+                GetDefaultResult();
+            }
+        });
+
+        donutChartPenjualan.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                PieEntry pe = (PieEntry) e;
+                SliceValue = String.valueOf(pe.getValue());
+                SliceLabel = pe.getLabel();
+                Log.e("slice label : ", pe.getLabel());
+                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                openPopup();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        donutChartKasdanBank.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                PieEntry pe = (PieEntry) e;
+                SliceValue = String.valueOf(pe.getValue());
+                SliceLabel = pe.getLabel();
+                Log.e("slice label : ", pe.getLabel());
+                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                openPopup();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        donutChartPersediaan.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                PieEntry pe = (PieEntry) e;
+                SliceValue = String.valueOf(pe.getValue());
+                SliceLabel = pe.getLabel();
+                Log.e("slice label : ", pe.getLabel());
+                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                openPopup();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+        donutChartPendapatan.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                PieEntry pe = (PieEntry) e;
+                SliceValue = String.valueOf(pe.getValue());
+                SliceLabel = pe.getLabel();
+                Log.e("slice label : ", pe.getLabel());
+                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                openPopup();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
             }
         });
     }
-
+    public void openPopup(){
+        SliceDialog sliceDialog = new SliceDialog();
+        sliceDialog.show(getSupportFragmentManager(), "Slice PopUp");
+    }
     //Setting the date
     private void datelistener2() {
         mDateSetListener2 = new DatePickerDialog.OnDateSetListener() {
@@ -474,6 +542,11 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     formatString(penjualanValue, Header.getListHeader().get(12), 1);
                                     formatString(pendapatanValue, Header.getListHeader().get(8), 1);
                                 }
+
+                                //Controlling view
+                                submitDashboard.setEnabled(true);
+                                progressDashboardBar.setVisibility(View.GONE);
+                                contentDashboard.setVisibility(View.VISIBLE);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -529,16 +602,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     //Chart setup 2
                                     ArrayList<PieEntry> kasB = new ArrayList<>();
                                     if (Float.parseFloat(value)==0){
-                                        kasB.add(new PieEntry(1, Kasbank.getLabel()));
+                                        kasB.add(new PieEntry(1, Kasbank.getLabel().toUpperCase()));
                                     }
                                     else
-                                    kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel()));
+                                        kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel().toUpperCase()));
                                     for (int i = 1; i < Kasbank.getListKasbank().size(); i += 2) {
                                         if (Float.parseFloat(Kasbank.getListKasbank().get(i+1))==0){
-                                            kasB.add(new PieEntry(1, Kasbank.getListKasbank().get(i)));
+                                            kasB.add(new PieEntry(1, Kasbank.getListKasbank().get(i).toUpperCase()));
                                         }
                                         else
-                                        kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i)));
+                                            kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i).toUpperCase()));
                                     }
 
                                     setDonutCharts(kasB, diagramColors, donutChartKasdanBank, "KAS DAN BANK");
@@ -602,34 +675,25 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     //Chart setup 1
                                     ArrayList<PieEntry> perse = new ArrayList<>();
                                     if (Float.parseFloat(value)==0){
-                                        perse.add(new PieEntry(1, Persediaan.getLabel()));
+                                        perse.add(new PieEntry(1, Persediaan.getLabel().toUpperCase()));
                                     }
                                     else
-                                    perse.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel()));
+                                        perse.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel().toUpperCase()));
                                     for (int i = 1; i < Persediaan.getListPersediaan().size(); i += 2) {
-                                       if(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)) == 0){
-                                           perse.add(new PieEntry(1, Persediaan.getListPersediaan().get(i)));
-                                       }
-                                       else
-                                        perse.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)), Persediaan.getListPersediaan().get(i)));
+                                        if(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)) == 0){
+                                            perse.add(new PieEntry(1, Persediaan.getListPersediaan().get(i).toUpperCase()));
+                                        }
+                                        else
+                                            perse.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)), Persediaan.getListPersediaan().get(i).toUpperCase()));
                                     }
 
                                     setDonutCharts(perse, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
-
-                                    //Controlling view
-                                    submitDashboard.setEnabled(true);
-                                    progressDashboardBar.setVisibility(View.GONE);
-                                    contentDashboard.setVisibility(View.VISIBLE);
                                 }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         } else {
-                            //Controlling view
-                            submitDashboard.setEnabled(true);
-                            progressDashboardBar.setVisibility(View.GONE);
-                            contentDashboard.setVisibility(View.VISIBLE);
                             donutChartPersediaan.clear();
                         }
                     }
@@ -688,7 +752,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     }
                                     else
                                         penj.add(new PieEntry(Float.parseFloat(Penjualan.getValue()), Penjualan.getLabel()));
-                                        totalPenjualan = Float.parseFloat(Penjualan.getValue());
+                                    totalPenjualan = Float.parseFloat(Penjualan.getValue());
                                     for (int i = 1; i < Penjualan.getListPenjualan().size(); i += 3) {
                                         if (Float.parseFloat(Penjualan.getListPenjualan().get(i+2))==0) {
                                             penj.add(new PieEntry(1, Penjualan.getListPenjualan().get(i)));
@@ -776,13 +840,13 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                         pend.add(new PieEntry(1, PendapatanBiaya.getLabel()));
                                     }
                                     else
-                                    pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getValue())), PendapatanBiaya.getLabel()));
+                                        pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getValue())), PendapatanBiaya.getLabel()));
                                     for (int i = 1; i < PendapatanBiaya.getListPendapatanBiaya().size(); i += 3) {
                                         if(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i+2))==0){
                                             pend.add(new PieEntry(1,PendapatanBiaya.getListPendapatanBiaya().get(i)));
                                         }
                                         else
-                                        pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i + 2))), PendapatanBiaya.getListPendapatanBiaya().get(i)));
+                                            pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i + 2))), PendapatanBiaya.getListPendapatanBiaya().get(i)));
                                     }
 
                                     setDonutCharts(pend, diagramColors, donutChartPendapatan, "PENDAPATAN");
@@ -874,7 +938,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     Log.e("HutangValue : ", valueHutang.get(0) + " " + valueHutang.get(1) + " " + valueHutang.get(2) +
                                             " " + valueHutang.get(3) + " " + valueHutang.get(4));
                                     listHutangAdapter = new ListHutangAdapter(Dashboard.this, labelHutangPiutang, valueHutang, valuePiutang);
-                                    
+
                                     listhutang.setNestedScrollingEnabled(true);
                                     listhutang.setAdapter(listHutangAdapter);
                                 }
@@ -1126,7 +1190,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         pieChart.setData(pieData);
         //Setting the diagram legend
         pieChart.getLegend().setFormSize(15f);
-        pieChart.getLegend().setTextSize(15f);
+        pieChart.getLegend().setTextSize(14f);
         pieChart.getLegend().setXEntrySpace(20f);
         pieChart.getLegend().setWordWrapEnabled(true);
         //pieChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
