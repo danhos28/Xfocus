@@ -1,11 +1,13 @@
 package com.example.xfocus.HomePages;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.animation.Animation;
@@ -45,7 +47,6 @@ import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
-import com.example.xfocus.SliceDialog;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -58,7 +59,6 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,6 +77,7 @@ import java.util.Locale;
 public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private DatePickerDialog.OnDateSetListener mDateSetListener, mDateSetListener2;
     public static String SliceValue, SliceLabel;
+    public static int red, green, blue;
     TextView persediaanValue, kasdanbankValue, penjualanValue, pendapatanValue;
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
     ListHutangAdapter listHutangAdapter;
@@ -100,6 +101,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> labelHutangPiutang = new ArrayList<>();
     ArrayList<String> valuePiutang = new ArrayList<>();
     ArrayList<String> valueHutang = new ArrayList<>();
+    ArrayList<String> list_penj = new ArrayList<>();
+    ArrayList<String> list_perse = new ArrayList<>();
+    ArrayList<String> list_kasB = new ArrayList<>();
+    ArrayList<String> list_pend = new ArrayList<>();
     int[] diagramColors = {Color.rgb(229, 57, 53), Color.rgb(255, 204, 128),
             Color.rgb(156, 39, 176), Color.rgb(234, 128, 252), Color.rgb(77, 208, 225),
             Color.rgb(217, 80, 138), Color.rgb(254, 149, 7), Color.rgb(254, 247, 120),
@@ -161,6 +166,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        list_pend.clear();
+        list_perse.clear();
+        list_penj.clear();
+        list_kasB.clear();
         setContentView(R.layout.activity_dashboard);
 
         //Toast.makeText(getApplicationContext(), "your cookies: "+ ClientNo.cookiesKey[0], Toast.LENGTH_LONG).show();
@@ -363,8 +372,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 PieEntry pe = (PieEntry) e;
                 SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
-                Log.e("slice label : ", pe.getLabel());
-                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                int idx = list_penj.indexOf(pe.getLabel());
+                red=Color.red(diagramColors[idx]);
+                green=Color.green(diagramColors[idx]);
+                blue=Color.blue(diagramColors[idx]);
+                Log.e("slice label ", pe.getLabel());
+                Log.e("index label ", String.valueOf(idx));
+                Log.e("slice value ", String.valueOf(pe.getValue()));
+                Log.e("slice color red ", String.valueOf(red));
+                Log.e("slice color green ", String.valueOf(green));
+                Log.e("slice color blue ", String.valueOf(blue));
                 openPopup();
             }
 
@@ -379,8 +396,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 PieEntry pe = (PieEntry) e;
                 SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
-                Log.e("slice label : ", pe.getLabel());
-                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                int idx = list_kasB.indexOf(pe.getLabel());
+                red=Color.red(diagramColors[idx]);
+                green=Color.green(diagramColors[idx]);
+                blue=Color.blue(diagramColors[idx]);
+                Log.e("slice label ", pe.getLabel());
+                Log.e("index label ", String.valueOf(idx));
+                Log.e("slice value ", String.valueOf(pe.getValue()));
+                Log.e("slice color red ", String.valueOf(red));
+                Log.e("slice color green ", String.valueOf(green));
+                Log.e("slice color blue ", String.valueOf(blue));
                 openPopup();
             }
 
@@ -395,8 +420,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 PieEntry pe = (PieEntry) e;
                 SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
-                Log.e("slice label : ", pe.getLabel());
-                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                int idx=list_perse.indexOf(pe.getLabel());
+                red=Color.red(diagramColors[idx]);
+                green=Color.green(diagramColors[idx]);
+                blue=Color.blue(diagramColors[idx]);
+                Log.e("slice label ", pe.getLabel());
+                Log.e("index label ", String.valueOf(idx));
+                Log.e("slice value ", String.valueOf(pe.getValue()));
+                Log.e("slice color red ", String.valueOf(red));
+                Log.e("slice color green ", String.valueOf(green));
+                Log.e("slice color blue ", String.valueOf(blue));
                 openPopup();
             }
 
@@ -411,8 +444,16 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                 PieEntry pe = (PieEntry) e;
                 SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
-                Log.e("slice label : ", pe.getLabel());
-                Log.e("slice value : ", String.valueOf(pe.getValue()));
+                int idx=list_pend.indexOf(pe.getLabel());
+                red=Color.red(diagramColors[idx]);
+                green=Color.green(diagramColors[idx]);
+                blue=Color.blue(diagramColors[idx]);
+                Log.e("slice label ", pe.getLabel());
+                Log.e("index label ", String.valueOf(idx));
+                Log.e("slice value ", String.valueOf(pe.getValue()));
+                Log.e("slice color red ", String.valueOf(red));
+                Log.e("slice color green ", String.valueOf(green));
+                Log.e("slice color blue ", String.valueOf(blue));
                 openPopup();
             }
 
@@ -422,9 +463,33 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             }
         });
     }
-    public void openPopup(){
-        SliceDialog sliceDialog = new SliceDialog();
-        sliceDialog.show(getSupportFragmentManager(), "Slice PopUp");
+    void openPopup(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.slice_dialog, null);
+        LinearLayout Colorslice = view.findViewById(R.id.sliceColor);
+        TextView label=view.findViewById(R.id.labelslice);
+        TextView value=view.findViewById(R.id.valueslice);
+        Button ok=view.findViewById(R.id.buttonOk);
+        Colorslice.setBackgroundColor(Color.rgb(red,green,blue));
+        builder.setView(view);
+        builder.create();
+        label.setText(Dashboard.SliceLabel);
+
+        if (Dashboard.SliceValue.equals("1.0")){
+            value.setText("Value : " + 0);
+        }
+        else{
+            value.setText("Value : " + NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(Dashboard.SliceValue)));
+        }
+        final AlertDialog ad = builder.show();
+       ok.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+                ad.dismiss();
+           }
+       });
+
     }
     //Setting the date
     private void datelistener2() {
@@ -603,15 +668,20 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     ArrayList<PieEntry> kasB = new ArrayList<>();
                                     if (Float.parseFloat(value)==0){
                                         kasB.add(new PieEntry(1, Kasbank.getLabel().toUpperCase()));
+                                        list_kasB.add(Kasbank.getLabel().toUpperCase());
                                     }
-                                    else
+                                    else{
                                         kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel().toUpperCase()));
+                                        list_kasB.add(Kasbank.getLabel().toUpperCase());
+                                    }
                                     for (int i = 1; i < Kasbank.getListKasbank().size(); i += 2) {
                                         if (Float.parseFloat(Kasbank.getListKasbank().get(i+1))==0){
                                             kasB.add(new PieEntry(1, Kasbank.getListKasbank().get(i).toUpperCase()));
+                                            list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
                                         }
                                         else
                                             kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i).toUpperCase()));
+                                            list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
                                     }
 
                                     setDonutCharts(kasB, diagramColors, donutChartKasdanBank, "KAS DAN BANK");
@@ -676,18 +746,23 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     ArrayList<PieEntry> perse = new ArrayList<>();
                                     if (Float.parseFloat(value)==0){
                                         perse.add(new PieEntry(1, Persediaan.getLabel().toUpperCase()));
+                                        list_perse.add(Persediaan.getLabel().toUpperCase());
                                     }
-                                    else
+                                    else{
                                         perse.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel().toUpperCase()));
+                                        list_perse.add(Persediaan.getLabel().toUpperCase());
+                                    }
                                     for (int i = 1; i < Persediaan.getListPersediaan().size(); i += 2) {
                                         if(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)) == 0){
                                             perse.add(new PieEntry(1, Persediaan.getListPersediaan().get(i).toUpperCase()));
+                                            list_perse.add(Persediaan.getListPersediaan().get(i).toUpperCase());
                                         }
                                         else
                                             perse.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)), Persediaan.getListPersediaan().get(i).toUpperCase()));
+                                            list_perse.add(Persediaan.getListPersediaan().get(i).toUpperCase());
                                     }
 
-                                    setDonutCharts(perse, ColorTemplate.MATERIAL_COLORS, donutChartPersediaan, "PERSEDIAAN");
+                                    setDonutCharts(perse, diagramColors, donutChartPersediaan, "PERSEDIAAN");
                                 }
 
                             } catch (JSONException e) {
@@ -749,17 +824,23 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     ArrayList<PieEntry> penj = new ArrayList<>();
                                     if(Float.parseFloat(value) == 0){
                                         penj.add(new PieEntry(1, Penjualan.getLabel()));
+                                        list_penj.add(Penjualan.getLabel());
                                     }
                                     else
+                                    {
                                         penj.add(new PieEntry(Float.parseFloat(Penjualan.getValue()), Penjualan.getLabel()));
+                                        list_penj.add(Penjualan.getLabel());
+                                    }
                                     totalPenjualan = Float.parseFloat(Penjualan.getValue());
                                     for (int i = 1; i < Penjualan.getListPenjualan().size(); i += 3) {
                                         if (Float.parseFloat(Penjualan.getListPenjualan().get(i+2))==0) {
                                             penj.add(new PieEntry(1, Penjualan.getListPenjualan().get(i)));
+                                            list_penj.add(Penjualan.getListPenjualan().get(i));
                                         }
                                         else{
                                             totalPenjualan += Float.parseFloat(Penjualan.getListPenjualan().get(i + 2));
                                             penj.add(new PieEntry(Float.parseFloat(Penjualan.getListPenjualan().get(i + 2)), Penjualan.getListPenjualan().get(i)));
+                                            list_penj.add(Penjualan.getListPenjualan().get(i));
                                         }
                                     }
 
@@ -838,15 +919,21 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     ArrayList<PieEntry> pend = new ArrayList<>();
                                     if (Float.parseFloat(value)==0){
                                         pend.add(new PieEntry(1, PendapatanBiaya.getLabel()));
+                                        list_pend.add(PendapatanBiaya.getLabel());
                                     }
-                                    else
+                                    else {
                                         pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getValue())), PendapatanBiaya.getLabel()));
+                                        list_pend.add(PendapatanBiaya.getLabel());
+                                    }
                                     for (int i = 1; i < PendapatanBiaya.getListPendapatanBiaya().size(); i += 3) {
                                         if(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i+2))==0){
                                             pend.add(new PieEntry(1,PendapatanBiaya.getListPendapatanBiaya().get(i)));
+                                            list_pend.add(PendapatanBiaya.getListPendapatanBiaya().get(i));
                                         }
-                                        else
+                                        else{
                                             pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i + 2))), PendapatanBiaya.getListPendapatanBiaya().get(i)));
+                                            list_pend.add(PendapatanBiaya.getListPendapatanBiaya().get(i));
+                                        }
                                     }
 
                                     setDonutCharts(pend, diagramColors, donutChartPendapatan, "PENDAPATAN");
@@ -1193,11 +1280,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         pieChart.getLegend().setTextSize(14f);
         pieChart.getLegend().setXEntrySpace(20f);
         pieChart.getLegend().setWordWrapEnabled(true);
-        //pieChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        //pieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        //pieChart.getLegend().setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
-        //pieChart.getLegend().setOrientation(Legend.LegendOrientation.VERTICAL);
-        //pieChart.getLegend().setDrawInside(false);
+        pieChart.getLegend().setEnabled(false);
         //Using percentage
         //pieChart.setUsePercentValues(true);
         //Setting the minimum angle
