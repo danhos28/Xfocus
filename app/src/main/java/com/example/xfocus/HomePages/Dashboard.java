@@ -82,6 +82,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
     ListHutangAdapter listHutangAdapter;
     Float totalPenjualan;
+    Float totalPendapatan;
     ListView listhutang;
     LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown, hutangpiutangDropdown, labarugiDropdown;
     CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard, hutangpiutangCard, labarugiCard;
@@ -594,18 +595,18 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
                                     formatString(persediaanValue, Header.getListHeader().get(4), 1000);
                                     formatString(kasdanbankValue, Header.getValue(), 1000);
-                                    formatString(penjualanValue, Penjualan.getListPenjualan().get(12), 1000);
-                                    formatString(pendapatanValue, Header.getListHeader().get(8), 1000);
+                                    //formatString(penjualanValue, Penjualan.getListPenjualan().get(12), 1000);
+                                    //formatString(pendapatanValue, Header.getListHeader().get(8), 1000);
                                 } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
                                     formatString(persediaanValue, Header.getListHeader().get(4), 1000000);
                                     formatString(kasdanbankValue, Header.getValue(), 1000000);
-                                    formatString(penjualanValue, Header.getListHeader().get(12), 1000000);
-                                    formatString(pendapatanValue, Header.getListHeader().get(8), 1000000);
+                                    //formatString(penjualanValue, Header.getListHeader().get(12), 1000000);
+                                    //formatString(pendapatanValue, Header.getListHeader().get(8), 1000000);
                                 } else {
                                     formatString(persediaanValue, Header.getListHeader().get(4), 1);
                                     formatString(kasdanbankValue, Header.getValue(), 1);
-                                    formatString(penjualanValue, Header.getListHeader().get(12), 1);
-                                    formatString(pendapatanValue, Header.getListHeader().get(8), 1);
+                                    //formatString(penjualanValue, Header.getListHeader().get(12), 1);
+                                    //formatString(pendapatanValue, Header.getListHeader().get(8), 1);
                                 }
 
                                 //Controlling view
@@ -925,15 +926,25 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                         pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getValue())), PendapatanBiaya.getLabel()));
                                         list_pend.add(PendapatanBiaya.getLabel());
                                     }
+                                    totalPendapatan = Float.parseFloat(PendapatanBiaya.getValue());
                                     for (int i = 1; i < PendapatanBiaya.getListPendapatanBiaya().size(); i += 3) {
                                         if(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i+2))==0){
                                             pend.add(new PieEntry(1,PendapatanBiaya.getListPendapatanBiaya().get(i)));
                                             list_pend.add(PendapatanBiaya.getListPendapatanBiaya().get(i));
                                         }
                                         else{
+                                            totalPendapatan += Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i + 2));
                                             pend.add(new PieEntry(Math.abs(Float.parseFloat(PendapatanBiaya.getListPendapatanBiaya().get(i + 2))), PendapatanBiaya.getListPendapatanBiaya().get(i)));
                                             list_pend.add(PendapatanBiaya.getListPendapatanBiaya().get(i));
                                         }
+                                    }
+
+                                    if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                        formatString(pendapatanValue, totalPendapatan.toString(), 1000);
+                                    } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                        formatString(pendapatanValue, totalPendapatan.toString(), 1000000);
+                                    } else {
+                                        formatString(pendapatanValue, totalPendapatan.toString(), 1);
                                     }
 
                                     setDonutCharts(pend, diagramColors, donutChartPendapatan, "PENDAPATAN");
