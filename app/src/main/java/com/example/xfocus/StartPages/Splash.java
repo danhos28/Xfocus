@@ -15,6 +15,7 @@ import com.example.xfocus.R;
 import com.example.xfocus.SessionManagerClass.SessionManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -53,6 +54,7 @@ public class Splash extends AppCompatActivity {
                 Intent intent2 = new Intent(Splash.this, Dashboard.class);
                 if (!session.loginStatus()){
                     session.logoutUser();
+
                     startActivity(intent1);
                 }
                 else{
@@ -69,6 +71,8 @@ public class Splash extends AppCompatActivity {
                             userDetails.get(session.Key_isAreaPusat), userDetails.get(session.Key_userID), userDetails.get(session.Key_userName), userDetails.get(session.Key_clientID),
                             userDetails.get(session.Key_clientS), userDetails.get(session.Key_clientLogo), userDetails.get(session.Key_pegawaiID), userDetails.get(session.Key_pegawaiName),
                             userDetails.get(session.Key_pegawaiAlias), getListArea, getListAreaID);
+
+                    intent2.putExtra("defItem", 6);
 
                     startActivity(intent2);
                 }

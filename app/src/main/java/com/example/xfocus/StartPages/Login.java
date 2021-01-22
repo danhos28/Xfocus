@@ -124,6 +124,7 @@ public class Login extends AppCompatActivity {
 
                     //Go to dashboard after loggin
                     Intent intent = new Intent(Login.this, Dashboard.class);
+                    intent.putExtra("defItem", 0);
                     startActivity(intent);
                     finish();
                 } else {

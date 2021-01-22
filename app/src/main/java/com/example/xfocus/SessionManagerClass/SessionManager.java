@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class SessionManager {
 
@@ -54,8 +56,11 @@ public class SessionManager {
                                    String clientid, String client, String clientlogo, String pegawaiid, String pegawainame,
                                    String pegawaialias, ArrayList<String> listarea, ArrayList<String> listareaid){
 
-        Set<String> listareaconvert = new HashSet<>(listarea);
-        Set<String> listareaidconvert = new HashSet<>(listareaid);
+        Set<String> listareaconvert = new LinkedHashSet<String>();
+        Set<String> listareaidconvert = new LinkedHashSet<String>();
+
+        listareaconvert.addAll(listarea);
+        listareaidconvert.addAll(listareaid);
 
         editor.putString(Key_userStats, status);
         editor.putString(Key_userAreaID, areaid);
@@ -98,8 +103,11 @@ public class SessionManager {
     public HashMap<String, Set<String>> getUserDetailListFromSession(){
         HashMap<String, Set<String>> userDataList = new HashMap<String, Set<String>>();
 
-        Set<String> listareaget = userSession.getStringSet(Key_listArea, null);
-        Set<String> listareaidget = userSession.getStringSet(Key_listAreaID, null);
+        Set<String> listareaget = new LinkedHashSet<String>();
+        Set<String> listareaidget = new LinkedHashSet<String>();
+
+        listareaget.addAll(userSession.getStringSet(Key_listArea, null));
+        listareaidget.addAll(userSession.getStringSet(Key_listAreaID, null));
 
         userDataList.put(Key_listArea, listareaget);
         userDataList.put(Key_listAreaID, listareaidget);

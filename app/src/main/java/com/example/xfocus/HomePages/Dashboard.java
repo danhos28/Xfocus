@@ -2,6 +2,7 @@ package com.example.xfocus.HomePages;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ import com.example.xfocus.PendapatanBiaya;
 import com.example.xfocus.Penjualan;
 import com.example.xfocus.Persediaan;
 import com.example.xfocus.R;
+import com.example.xfocus.SessionManagerClass.SessionManager;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -122,6 +124,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     LabaRugi labaRugi;
     int labaRugiMonth = 1;
 
+    SessionManager sessionManager;
+
     ArrayAdapter<String> areaAdapter, tampilanAdapter, periodAdapter;
     RequestQueue requestQueue;
     ScrollView scrollDashboard;
@@ -167,10 +171,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        list_pend.clear();
-        list_perse.clear();
-        list_penj.clear();
-        list_kasB.clear();
+
         setContentView(R.layout.activity_dashboard);
 
         //Toast.makeText(getApplicationContext(), "your cookies: "+ ClientNo.cookiesKey[0], Toast.LENGTH_LONG).show();
@@ -530,7 +531,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerArea.setAdapter(areaAdapter);
-        spinnerArea.setSelection(0);
+        spinnerArea.setSelection(getIntent().getExtras().getInt("defItem"));
         //spinner tampilan
         tampilanAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_tampilan);
         tampilanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -560,6 +561,11 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     //Getting the default result for the diagrams
     public void GetDefaultResult() {
+        list_pend.clear();
+        list_perse.clear();
+        list_penj.clear();
+        list_kasB.clear();
+
         //Controlling view
         progressDashboardBar.setVisibility(View.VISIBLE);
         contentDashboard.setVisibility(View.GONE);
@@ -939,6 +945,8 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                         }
                                     }
 
+                                    setDonutCharts(pend, diagramColors, donutChartPendapatan, "PENDAPATAN");
+
                                     if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
                                         formatString(pendapatanValue, totalPendapatan.toString(), 1000);
                                     } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
@@ -947,7 +955,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                         formatString(pendapatanValue, totalPendapatan.toString(), 1);
                                     }
 
-                                    setDonutCharts(pend, diagramColors, donutChartPendapatan, "PENDAPATAN");
+                                    if (totalPendapatan == 0) {
+                                        donutChartPersediaan.clear();
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
