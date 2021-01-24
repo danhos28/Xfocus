@@ -174,6 +174,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
         setContentView(R.layout.activity_dashboard);
 
+
+        Log.e("List Area", ClientLogin.getListArea().toString());
+
+
         //Toast.makeText(getApplicationContext(), "your cookies: "+ ClientNo.cookiesKey[0], Toast.LENGTH_LONG).show();
         //Scrollview hooks
         scrollDashboard = findViewById(R.id.scrollDashboard);
@@ -358,6 +362,11 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         submitDashboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                list_pend.clear();
+                list_perse.clear();
+                list_penj.clear();
+                list_kasB.clear();
+
                 getPersediaan();
                 getKasbank();
                 getPenjualan();
@@ -531,7 +540,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         areaAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_area);
         areaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerArea.setAdapter(areaAdapter);
-        spinnerArea.setSelection(getIntent().getExtras().getInt("defItem"));
+        spinnerArea.setSelection(0);
         //spinner tampilan
         tampilanAdapter = new ArrayAdapter<>(Dashboard.this, android.R.layout.simple_spinner_item, list_tampilan);
         tampilanAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -561,10 +570,6 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     //Getting the default result for the diagrams
     public void GetDefaultResult() {
-        list_pend.clear();
-        list_perse.clear();
-        list_penj.clear();
-        list_kasB.clear();
 
         //Controlling view
         progressDashboardBar.setVisibility(View.VISIBLE);

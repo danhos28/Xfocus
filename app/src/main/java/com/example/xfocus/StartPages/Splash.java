@@ -3,8 +3,11 @@ package com.example.xfocus.StartPages;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -13,7 +16,10 @@ import com.example.xfocus.Header;
 import com.example.xfocus.HomePages.Dashboard;
 import com.example.xfocus.R;
 import com.example.xfocus.SessionManagerClass.SessionManager;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,20 +65,21 @@ public class Splash extends AppCompatActivity {
                 }
                 else{
                     HashMap<String, String> userDetails = session.getUserDetailFromSession();
-                    HashMap<String, Set<String>> userListDetails = session.getUserDetailListFromSession();
 
-                    ArrayList<String> getListArea = new ArrayList<>();
-                    ArrayList<String> getListAreaID = new ArrayList<>();
+                    //Taking the saved arealist and arealistid value
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(Splash.this);
+                    Gson gson = new Gson();
+                    String areaListUser = sharedPrefs.getString("areaList", "");
+                    String areaListIDUser = sharedPrefs.getString("areaidList", "");
+                    Type type = new TypeToken<ArrayList<String>>() {}.getType();
+                    ArrayList<String> getListArea = gson.fromJson(areaListUser, type);
+                    ArrayList<String> getListAreaID = gson.fromJson(areaListIDUser, type);
 
-                    getListArea.addAll(userListDetails.get(session.Key_listArea));
-                    getListAreaID.addAll(userListDetails.get(session.Key_listAreaID));
 
                     ClientLogin clientLogin = new ClientLogin(userDetails.get(session.Key_userStats), userDetails.get(session.Key_userAreaID), userDetails.get(session.Key_userAreaName),
                             userDetails.get(session.Key_isAreaPusat), userDetails.get(session.Key_userID), userDetails.get(session.Key_userName), userDetails.get(session.Key_clientID),
                             userDetails.get(session.Key_clientS), userDetails.get(session.Key_clientLogo), userDetails.get(session.Key_pegawaiID), userDetails.get(session.Key_pegawaiName),
                             userDetails.get(session.Key_pegawaiAlias), getListArea, getListAreaID);
-
-                    intent2.putExtra("defItem", 6);
 
                     startActivity(intent2);
                 }

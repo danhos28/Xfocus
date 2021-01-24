@@ -3,6 +3,7 @@ package com.example.xfocus.SessionManagerClass;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +34,6 @@ public class SessionManager {
     public static final String Key_pegawaiID = "pegawaiid";
     public static final String Key_pegawaiName = "pegawainame";
     public static final String Key_pegawaiAlias = "pegawaialias";
-    public static final String Key_listArea = "listarea";
-    public static final String Key_listAreaID = "listareaid";
 
     //Session creation
     public SessionManager(Context _context){
@@ -54,13 +53,7 @@ public class SessionManager {
     //Put userdata to the session userLoginStats
     public void createLoginSession(String status, String areaid, String areaname, String ispusat, String userid, String username,
                                    String clientid, String client, String clientlogo, String pegawaiid, String pegawainame,
-                                   String pegawaialias, ArrayList<String> listarea, ArrayList<String> listareaid){
-
-        Set<String> listareaconvert = new LinkedHashSet<String>();
-        Set<String> listareaidconvert = new LinkedHashSet<String>();
-
-        listareaconvert.addAll(listarea);
-        listareaidconvert.addAll(listareaid);
+                                   String pegawaialias){
 
         editor.putString(Key_userStats, status);
         editor.putString(Key_userAreaID, areaid);
@@ -74,8 +67,6 @@ public class SessionManager {
         editor.putString(Key_pegawaiID, pegawaiid);
         editor.putString(Key_pegawaiName, pegawainame);
         editor.putString(Key_pegawaiAlias, pegawaialias);
-        editor.putStringSet(Key_listArea, listareaconvert);
-        editor.putStringSet(Key_listAreaID, listareaidconvert);
 
         editor.commit();
     }
@@ -98,21 +89,6 @@ public class SessionManager {
         userData.put(Key_pegawaiAlias, userSession.getString(Key_pegawaiAlias, null));
 
         return userData;
-    }
-
-    public HashMap<String, Set<String>> getUserDetailListFromSession(){
-        HashMap<String, Set<String>> userDataList = new HashMap<String, Set<String>>();
-
-        Set<String> listareaget = new LinkedHashSet<String>();
-        Set<String> listareaidget = new LinkedHashSet<String>();
-
-        listareaget.addAll(userSession.getStringSet(Key_listArea, null));
-        listareaidget.addAll(userSession.getStringSet(Key_listAreaID, null));
-
-        userDataList.put(Key_listArea, listareaget);
-        userDataList.put(Key_listAreaID, listareaidget);
-
-        return userDataList;
     }
 
 
