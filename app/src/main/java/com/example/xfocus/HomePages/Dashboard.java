@@ -482,8 +482,15 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             value.setText("Nilai : " + 0);
         }
         else{
-            value.setText("Nilai : " + NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(Dashboard.SliceValue)));
+            if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                formatString(value, Dashboard.SliceValue, 1000);
+            } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                formatString(value, Dashboard.SliceValue, 1000000);
+            } else {
+                formatString(value, Dashboard.SliceValue, 1);
+            }
         }
+
         final AlertDialog ad = builder.show();
        ok.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -1033,17 +1040,44 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     labelHutangPiutang.add(list_hutangPiutang.get(33));
                                     //-------------------------------------------------
                                     //formatString(persediaanValue, Header.getListHeader().get(4), 1000);
+                                    NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+                                    numberFormat.setMinimumFractionDigits(2);
+                                    numberFormat.setMaximumFractionDigits(2);
+
                                     if (tipe.equals("Hutang")) {
-                                        valueHutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(value)));
+                                        if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                            valueHutang.add(numberFormat.format(Double.parseDouble(value)/1000));
+                                        } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                            valueHutang.add(numberFormat.format(Double.parseDouble(value)/1000000));
+                                        } else {
+                                            valueHutang.add(numberFormat.format(Double.parseDouble(value)));
+                                        }
                                     } else {
-                                        valuePiutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(value)));
+                                        if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                            valuePiutang.add(numberFormat.format(Double.parseDouble(value)/1000));
+                                        } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                            valuePiutang.add(numberFormat.format(Double.parseDouble(value)/1000000));
+                                        } else {
+                                            valuePiutang.add(numberFormat.format(Double.parseDouble(value)));
+                                        }
                                     }
                                     for (int i = 2; i < list_hutangPiutang.size(); i += 4) {
                                         if (list_hutangPiutang.get(i).equals("Hutang")) {
-                                            valueHutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
+                                            if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                                valueHutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000));
+                                            } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                                valueHutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000000));
+                                            } else {
+                                                valueHutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
+                                            }
                                         } else {
-                                            valuePiutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
-                                        }
+                                            if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                                valuePiutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000));
+                                            } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                                valuePiutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000000));
+                                            } else {
+                                                valuePiutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
+                                            }                                        }
                                     }
 
                                     Log.e("HutangPiutangLabel : ", labelHutangPiutang.get(0) + labelHutangPiutang.get(1) + labelHutangPiutang.get(2)
@@ -1052,6 +1086,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                             " " + valuePiutang.get(3) + " " + valuePiutang.get(4));
                                     Log.e("HutangValue : ", valueHutang.get(0) + " " + valueHutang.get(1) + " " + valueHutang.get(2) +
                                             " " + valueHutang.get(3) + " " + valueHutang.get(4));
+
                                     listHutangAdapter = new ListHutangAdapter(Dashboard.this, labelHutangPiutang, valueHutang, valuePiutang);
 
                                     listhutang.setNestedScrollingEnabled(true);
