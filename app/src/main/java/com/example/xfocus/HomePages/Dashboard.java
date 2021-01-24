@@ -2,7 +2,6 @@ package com.example.xfocus.HomePages;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -107,6 +106,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_penj = new ArrayList<>();
     ArrayList<String> list_perse = new ArrayList<>();
     ArrayList<String> list_kasB = new ArrayList<>();
+    ArrayList<String> list_kasBValue = new ArrayList<>();
     ArrayList<String> list_pend = new ArrayList<>();
     int[] diagramColors = {Color.rgb(229, 57, 53), Color.rgb(255, 204, 128),
             Color.rgb(156, 39, 176), Color.rgb(234, 128, 252), Color.rgb(77, 208, 225),
@@ -396,9 +396,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 PieEntry pe = (PieEntry) e;
-                SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
                 int idx = list_kasB.indexOf(pe.getLabel());
+                SliceValue = list_kasBValue.get(idx);
                 red=Color.red(diagramColors[idx]);
                 green=Color.green(diagramColors[idx]);
                 blue=Color.blue(diagramColors[idx]);
@@ -479,10 +479,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         label.setText(Dashboard.SliceLabel);
 
         if (Dashboard.SliceValue.equals("1.0")){
-            value.setText("Value : " + 0);
+            value.setText("Nilai : " + 0);
         }
         else{
-            value.setText("Value : " + NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(Dashboard.SliceValue)));
+            value.setText("Nilai : " + NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(Dashboard.SliceValue)));
         }
         final AlertDialog ad = builder.show();
        ok.setOnClickListener(new View.OnClickListener() {
@@ -661,12 +661,17 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 JSONObject jsonObject = response.getJSONObject(0);
                                 String label = jsonObject.optString("label");
                                 String value = jsonObject.optString("value");
+                                list_kasBValue.add(value);
 
                                 JSONArray listkasbank = response.getJSONArray(1);
-                                for (int i = 0; i < listkasbank.length(); i++) {
+                                for (int i = 1; i < listkasbank.length(); i++) {
                                     String kasdanbank = listkasbank.getString(i);
                                     list_kasbank.add(kasdanbank);
                                 }
+                                /*for (int i = 2; i < listkasbank.length(); i+=2) {
+                                    String kasdanbankVal = listkasbank.getString(i);
+                                    list_kasBValue.add(kasdanbankVal);
+                                }*/
                                 Log.e("getKasbank: ", " label: " + label + " value: " + value + "listkasbank: " + list_kasbank);
                                 kasbank = new Kasbank(label, value, list_kasbank);
 
@@ -678,17 +683,19 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                         list_kasB.add(Kasbank.getLabel().toUpperCase());
                                     }
                                     else{
-                                        kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel().toUpperCase()));
+                                        kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getValue())), Kasbank.getLabel().toUpperCase()));
                                         list_kasB.add(Kasbank.getLabel().toUpperCase());
                                     }
-                                    for (int i = 1; i < Kasbank.getListKasbank().size(); i += 2) {
+                                    for (int i = 0; i < Kasbank.getListKasbank().size(); i += 2) {
                                         if (Float.parseFloat(Kasbank.getListKasbank().get(i+1))==0){
                                             kasB.add(new PieEntry(1, Kasbank.getListKasbank().get(i).toUpperCase()));
                                             list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
+                                            list_kasBValue.add(String.valueOf(0));
                                         }
                                         else
                                             kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i).toUpperCase()));
                                             list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
+                                            list_kasBValue.add(Kasbank.getListKasbank().get(i+1));
                                     }
 
                                     setDonutCharts(kasB, diagramColors, donutChartKasdanBank, "KAS DAN BANK");
