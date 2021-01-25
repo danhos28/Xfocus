@@ -492,11 +492,11 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         }
         else{
             if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
-                formatString(value, Dashboard.SliceValue, 1000);
+                formatStringPopUp(value, Dashboard.SliceValue, 1000);
             } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
-                formatString(value, Dashboard.SliceValue, 1000000);
+                formatStringPopUp(value, Dashboard.SliceValue, 1000000);
             } else {
-                formatString(value, Dashboard.SliceValue, 1);
+                formatStringPopUp(value, Dashboard.SliceValue, 1);
             }
         }
 
@@ -1372,6 +1372,10 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     //Formatting the currency of the number imported from database
     private void formatString(TextView textView, String value, int divided) {
         textView.setText(String.format("%1$,.2f", Double.parseDouble(value) / divided));
+    }
+
+    private void formatStringPopUp(TextView textView, String value, int divided) {
+        textView.setText("Nilai : " + String.format("%1$,.2f", Double.parseDouble(value) / divided));
     }
 
     //On spinner's item selected
