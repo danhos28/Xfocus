@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:text="Value"
             android:textSize="12dp"
+            android:textColor="#1A8C1F"
             android:maxLines="2"
             android:maxLength="50"
             android:fontFamily="@font/poppinsmedium"/>
@@ -41,15 +42,17 @@
         android:textSize="14dp"
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="@font/poppinsbold"/>
-    <TextView
-        android:id="@+id/valuePiutang"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Value"
-        android:textSize="12dp"
-        android:maxLines="2"
-        android:maxLength="50"
-        android:fontFamily="@font/poppinsmedium"/>
+
+        <TextView
+            android:id="@+id/valuePiutang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppinsmedium"
+            android:maxLength="50"
+            android:maxLines="2"
+            android:textColor="#1A8C1F"
+            android:text="Value"
+            android:textSize="12dp" />
     </LinearLayout>
 
 </LinearLayout>

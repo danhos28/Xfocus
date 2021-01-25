@@ -2,7 +2,6 @@ package com.example.xfocus.HomePages;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -107,6 +106,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ArrayList<String> list_penj = new ArrayList<>();
     ArrayList<String> list_perse = new ArrayList<>();
     ArrayList<String> list_kasB = new ArrayList<>();
+    ArrayList<String> list_kasBValue = new ArrayList<>();
     ArrayList<String> list_pend = new ArrayList<>();
     int[] diagramColors = {Color.rgb(229, 57, 53), Color.rgb(255, 204, 128),
             Color.rgb(156, 39, 176), Color.rgb(234, 128, 252), Color.rgb(77, 208, 225),
@@ -405,9 +405,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 PieEntry pe = (PieEntry) e;
-                SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
                 int idx = list_kasB.indexOf(pe.getLabel());
+                SliceValue = list_kasBValue.get(idx);
                 red=Color.red(diagramColors[idx]);
                 green=Color.green(diagramColors[idx]);
                 blue=Color.blue(diagramColors[idx]);
@@ -488,11 +488,18 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         label.setText(Dashboard.SliceLabel);
 
         if (Dashboard.SliceValue.equals("1.0")){
-            value.setText("Value : " + 0);
+            value.setText("Nilai : " + 0);
         }
         else{
-            value.setText("Value : " + NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(Dashboard.SliceValue)));
+            if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                formatString(value, Dashboard.SliceValue, 1000);
+            } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                formatString(value, Dashboard.SliceValue, 1000000);
+            } else {
+                formatString(value, Dashboard.SliceValue, 1);
+            }
         }
+
         final AlertDialog ad = builder.show();
        ok.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -666,12 +673,17 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                 JSONObject jsonObject = response.getJSONObject(0);
                                 String label = jsonObject.optString("label");
                                 String value = jsonObject.optString("value");
+                                list_kasBValue.add(value);
 
                                 JSONArray listkasbank = response.getJSONArray(1);
-                                for (int i = 0; i < listkasbank.length(); i++) {
+                                for (int i = 1; i < listkasbank.length(); i++) {
                                     String kasdanbank = listkasbank.getString(i);
                                     list_kasbank.add(kasdanbank);
                                 }
+                                /*for (int i = 2; i < listkasbank.length(); i+=2) {
+                                    String kasdanbankVal = listkasbank.getString(i);
+                                    list_kasBValue.add(kasdanbankVal);
+                                }*/
                                 Log.e("getKasbank: ", " label: " + label + " value: " + value + "listkasbank: " + list_kasbank);
                                 kasbank = new Kasbank(label, value, list_kasbank);
 
@@ -683,17 +695,19 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                         list_kasB.add(Kasbank.getLabel().toUpperCase());
                                     }
                                     else{
-                                        kasB.add(new PieEntry(Float.parseFloat(Kasbank.getValue()), Kasbank.getLabel().toUpperCase()));
+                                        kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getValue())), Kasbank.getLabel().toUpperCase()));
                                         list_kasB.add(Kasbank.getLabel().toUpperCase());
                                     }
-                                    for (int i = 1; i < Kasbank.getListKasbank().size(); i += 2) {
+                                    for (int i = 0; i < Kasbank.getListKasbank().size(); i += 2) {
                                         if (Float.parseFloat(Kasbank.getListKasbank().get(i+1))==0){
                                             kasB.add(new PieEntry(1, Kasbank.getListKasbank().get(i).toUpperCase()));
                                             list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
+                                            list_kasBValue.add(String.valueOf(0));
                                         }
                                         else
                                             kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i).toUpperCase()));
                                             list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
+                                            list_kasBValue.add(Kasbank.getListKasbank().get(i+1));
                                     }
 
                                     setDonutCharts(kasB, diagramColors, donutChartKasdanBank, "KAS DAN BANK");
@@ -1031,17 +1045,44 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                     labelHutangPiutang.add(list_hutangPiutang.get(33));
                                     //-------------------------------------------------
                                     //formatString(persediaanValue, Header.getListHeader().get(4), 1000);
+                                    NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+                                    numberFormat.setMinimumFractionDigits(2);
+                                    numberFormat.setMaximumFractionDigits(2);
+
                                     if (tipe.equals("Hutang")) {
-                                        valueHutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(value)));
+                                        if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                            valueHutang.add(numberFormat.format(Double.parseDouble(value)/1000));
+                                        } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                            valueHutang.add(numberFormat.format(Double.parseDouble(value)/1000000));
+                                        } else {
+                                            valueHutang.add(numberFormat.format(Double.parseDouble(value)));
+                                        }
                                     } else {
-                                        valuePiutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(value)));
+                                        if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                            valuePiutang.add(numberFormat.format(Double.parseDouble(value)/1000));
+                                        } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                            valuePiutang.add(numberFormat.format(Double.parseDouble(value)/1000000));
+                                        } else {
+                                            valuePiutang.add(numberFormat.format(Double.parseDouble(value)));
+                                        }
                                     }
                                     for (int i = 2; i < list_hutangPiutang.size(); i += 4) {
                                         if (list_hutangPiutang.get(i).equals("Hutang")) {
-                                            valueHutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
+                                            if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                                valueHutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000));
+                                            } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                                valueHutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000000));
+                                            } else {
+                                                valueHutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
+                                            }
                                         } else {
-                                            valuePiutang.add(NumberFormat.getNumberInstance(Locale.US).format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
-                                        }
+                                            if (spinnerTampilan.getSelectedItem().equals("Dalam Ribu")) {
+                                                valuePiutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000));
+                                            } else if (spinnerTampilan.getSelectedItem().equals("Dalam Juta")) {
+                                                valuePiutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))/1000000));
+                                            } else {
+                                                valuePiutang.add(numberFormat.format(Double.parseDouble(list_hutangPiutang.get(i + 2))));
+                                            }                                        }
                                     }
 
                                     Log.e("HutangPiutangLabel : ", labelHutangPiutang.get(0) + labelHutangPiutang.get(1) + labelHutangPiutang.get(2)
@@ -1050,6 +1091,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
                                             " " + valuePiutang.get(3) + " " + valuePiutang.get(4));
                                     Log.e("HutangValue : ", valueHutang.get(0) + " " + valueHutang.get(1) + " " + valueHutang.get(2) +
                                             " " + valueHutang.get(3) + " " + valueHutang.get(4));
+
                                     listHutangAdapter = new ListHutangAdapter(Dashboard.this, labelHutangPiutang, valueHutang, valuePiutang);
 
                                     listhutang.setNestedScrollingEnabled(true);
