@@ -3,6 +3,7 @@ package com.example.xfocus.HomePages;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -79,7 +82,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     private DatePickerDialog.OnDateSetListener mDateSetListener, mDateSetListener2;
     public static String SliceValue, SliceLabel;
     public static int red, green, blue;
+    ImageView xfocuslogo;
     TextView persediaanValue, kasdanbankValue, penjualanValue, pendapatanValue;
+    DrawerLayout drawerLayout;
     List<String[]> ArrayDefaultFormat = new ArrayList<String[]>();
     ListHutangAdapter listHutangAdapter;
     Float totalPenjualan;
@@ -87,7 +92,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     ListView listhutang;
     LinearLayout progressDashboardBar, contentDashboard, persediaanDropdown, kasdanbankDropdown, penjualanDropdown, pendapatanDropdown, hutangpiutangDropdown, labarugiDropdown;
     CardView persediaanCard, kasdanbankCard, penjualanCard, pendapatanCard, hutangpiutangCard, labarugiCard;
-    TextView first_date, last_date, username, areaname;
+    TextView first_date, last_date, username, areaname, areaNavBar;
     Button submitDashboard;
     Spinner spinnerArea, spinnerTampilan, spinnerPeriode;
     ArrayList<String> list_area = new ArrayList<>();
@@ -173,7 +178,9 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_dashboard);
-
+        drawerLayout = findViewById(R.id.drawer_layout);
+        xfocuslogo = findViewById(R.id.xfocusLogo);
+        ((Animatable) xfocuslogo.getDrawable()).start();//start Animation
 
         Log.e("List Area", ClientLogin.getListArea().toString());
 
@@ -329,6 +336,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         requestQueue = Volley.newRequestQueue(this);
         username = findViewById(R.id.NamaUser);
         areaname = findViewById(R.id.NamaArea);
+        areaNavBar = findViewById(R.id.area_navBar);
         //Spinner dashboard
         spinnerArea = findViewById(R.id.spinnerArea);
         spinnerPeriode = findViewById(R.id.spinnerPeriode);
@@ -351,6 +359,7 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         datelistener2();
         username.setText(ClientLogin.getUserName());
         areaname.setText(ClientLogin.getAreaName());
+        areaNavBar.setText(ClientLogin.getAreaName());
         //spinner
         spinnerArea.setOnItemSelectedListener(this);
         spinnerTampilan.setOnItemSelectedListener(this);
@@ -473,6 +482,23 @@ public class Dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
             }
         });
+    }
+
+    public void ClickMenu(View view){
+        openDrawer(drawerLayout);
+    }
+    public static void openDrawer(DrawerLayout drawerLayout) {
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+    public static void closeDrawer(DrawerLayout drawerLayout) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        closeDrawer(drawerLayout);
     }
     void openPopup(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
