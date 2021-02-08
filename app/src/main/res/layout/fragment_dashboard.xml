@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
+
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+       >
+
+        <ScrollView
+            android:id="@+id/scrollDashboard"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+
+            android:background="#f2f5f8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/spinnerDashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                    android:padding="10dp"
+                    android:background="#FFFFFF"
+                    tools:layout_editor_absoluteX="33dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:text="DASHBOARD"
+                        android:fontFamily="@font/poppinsbold"
+                        android:textColor="#0A365E"
+                        />
+                    <Spinner
+                        android:id="@+id/spinnerArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/spinner_bg"
+                        android:spinnerMode="dropdown"
+                        />
+                    <Spinner
+                        android:id="@+id/spinnerTampilan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/spinner_bg"
+                        />
+
+                    <Spinner
+                        android:id="@+id/spinnerPeriode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:background="@drawable/spinner_bg"
+                        />
+                    <LinearLayout
+                        android:paddingTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:paddingStart="20dp"
+                            android:background="@drawable/date_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:padding="6dp"
+                            android:id="@+id/first_date"
+                            android:text="PERIODE1"/>
+                        <TextView
+                            android:layout_marginTop="10dp"
+                            android:paddingStart="20dp"
+                            android:background="@drawable/date_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:padding="6dp"
+                            android:id="@+id/last_date"
+                            android:text="PERIODE2"/>
+
+                        <Button
+                            android:id="@+id/submitDashboard"
+                            android:layout_marginTop="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Proses"
+                            android:elevation="4dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/contentDashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFFFFF"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="#1A2688"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:layout_gravity="right"
+                            android:scaleType="centerCrop"
+                            app:srcCompat="@drawable/finance_background_resized"
+                            tools:srcCompat="@drawable/finance_background_resized" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="27sp"
+                            android:text="FINANCIAL SUMMARY"
+                            android:textColor="@android:color/white"
+                            android:textSize="23sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/poppinsmedium"
+                            android:text="Semua laporan financial akan ditampilkan disini, silahkan scroll"
+                            android:textColor="@android:color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/persediaanDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="18dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/navbar_bg"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/persediaanDropImage"
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            android:rotation="90"
+                            app:srcCompat="@drawable/double_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="24sp"
+                            android:layout_marginTop="-30dp"
+                            android:text="PERSEDIAAN"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/persediaanCard"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#290A4E"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/DonutChart1"
+                                android:background="@android:color/white"
+                                android:layout_margin="8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp"/>
+                            <TextView
+                                android:id="@+id/persediaanValue"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@android:color/white"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:id="@+id/kasdanbankDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="18dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/navbar_bg"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/kasdanbankDropImage"
+                            android:rotation="90"
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            app:srcCompat="@drawable/double_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="24sp"
+                            android:layout_marginTop="-30dp"
+                            android:text="KAS DAN BANK"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/kasdanbankCard"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#070707"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/DonutChart2"
+                                android:background="@android:color/white"
+                                android:layout_margin="8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp"/>
+                            <TextView
+                                android:id="@+id/kasdanbankValue"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@android:color/white"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:id="@+id/penjualanDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="18dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/navbar_bg"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/penjualankDropImage"
+                            android:rotation="90"
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            app:srcCompat="@drawable/double_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="24sp"
+                            android:layout_marginTop="-30dp"
+                            android:text="PENJUALAN"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/penjualanCard"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#1C571F"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/DonutChart3"
+                                android:background="@android:color/white"
+                                android:layout_margin="8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp"/>
+                            <TextView
+                                android:id="@+id/penjualanValue"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@android:color/white"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:id="@+id/hutangpiutangDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="18dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/navbar_bg"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/hutangpiutangkDropImage"
+                            android:rotation="90"
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            app:srcCompat="@drawable/double_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="24sp"
+                            android:layout_marginTop="-30dp"
+                            android:text="HUTANG PIUTANG"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/hutangpiutangCard"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#F3F3F3"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardElevation="2dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:orientation="vertical">
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="#E4E4E4"
+                                android:padding="10dp">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppinsbold"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="15dp"
+                                    android:layout_weight="0.5"
+                                    android:text="HUTANG"/>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:fontFamily="@font/poppinsbold"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="15dp"
+                                    android:layout_weight="0.5"
+                                    android:text="PIUTANG"/>
+                            </LinearLayout>
+                            <ListView
+                                android:id="@+id/listHutang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:id="@+id/pendapatanDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="18dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/navbar_bg"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/pendapatanDropImage"
+                            android:rotation="90"
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            app:srcCompat="@drawable/double_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="24sp"
+                            android:layout_marginTop="-30dp"
+                            android:text="PENDAPATAN DAN BIAYA"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/pendapatanCard"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#880F0F"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <com.github.mikephil.charting.charts.PieChart
+                                android:id="@+id/DonutChart4"
+                                android:background="@android:color/white"
+                                android:layout_margin="8dp"
+                                android:layout_width="match_parent"
+                                android:layout_height="400dp"/>
+                            <TextView
+                                android:id="@+id/pendapatanValue"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/poppinsbold"
+                                android:textColor="@android:color/white"
+                                android:textSize="20sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <LinearLayout
+                        android:id="@+id/labaDropdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:padding="18dp"
+                        android:elevation="2dp"
+                        android:background="@drawable/navbar_bg"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/labaDropImage"
+                            android:rotation="90"
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            app:srcCompat="@drawable/double_down" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppinsbold"
+                            android:lineHeight="24sp"
+                            android:layout_marginTop="-30dp"
+                            android:text="LABA RUGI"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/LabaRugiCard"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#880F0F"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginBottom="20dp"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/LineChart1"
+                                android:background="@android:color/white"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="500dp"/>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/progressDashboardBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/white_circle"
+            android:elevation="8dp"
+
+            android:padding="20dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.65"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <ProgressBar
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:indeterminateTint="@android:color/white" />
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>
