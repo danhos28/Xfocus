@@ -23,7 +23,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.xfocus.Client;
 import com.example.xfocus.ClientLogin;
-import com.example.xfocus.HomePages.Dashboard;
+import com.example.xfocus.HomePages.HomeActivity;
 import com.example.xfocus.R;
 import com.example.xfocus.SessionManagerClass.SessionManager;
 import com.google.gson.Gson;
@@ -140,7 +140,7 @@ public class Login extends AppCompatActivity {
                     sessionManager.UserLoggedIn();
 
                     //Go to dashboard after loggin
-                    Intent intent = new Intent(Login.this, Dashboard.class);
+                    Intent intent = new Intent(Login.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 } else {

@@ -1,19 +1,17 @@
 package com.example.xfocus.StartPages;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.xfocus.ClientLogin;
-import com.example.xfocus.Header;
-import com.example.xfocus.HomePages.Dashboard;
+import com.example.xfocus.HomePages.HomeActivity;
 import com.example.xfocus.R;
 import com.example.xfocus.SessionManagerClass.SessionManager;
 import com.google.gson.Gson;
@@ -21,9 +19,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Splash extends AppCompatActivity {
     ImageView xfocuslogo;
@@ -57,7 +53,7 @@ public class Splash extends AppCompatActivity {
                 e.printStackTrace();
             } finally {
                 Intent intent1 = new Intent(Splash.this, ClientNo.class);
-                Intent intent2 = new Intent(Splash.this, Dashboard.class);
+                Intent intent2 = new Intent(Splash.this, HomeActivity.class);
                 if (!session.loginStatus()){
                     session.logoutUser();
 

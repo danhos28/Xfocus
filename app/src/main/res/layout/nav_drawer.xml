@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimaryDark">
+   >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:background="@drawable/main_bg">
 
         <ImageView
             android:id="@+id/xfocusLogo"
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppinsbold"
             android:text="Area Name"
-            android:textColor="#ffff64"
+            android:textColor="#ffff"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,12 +41,9 @@
             app:layout_constraintTop_toBottomOf="@+id/xfocusLogo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 <LinearLayout
     android:layout_width="match_parent"
@@ -53,16 +51,17 @@
     android:orientation="horizontal"
     android:padding="10dp">
     <ImageView
+        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
         android:layout_width="60px"
         android:layout_height="60px"
-        android:src="@drawable/ic_master"/>
+        android:src="@drawable/ic_sync"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Master"
+        android:text="Ganti Cabang"
         android:textSize="12sp"
-        android:textColor="#ffff64"
+        android:textColor="@color/colorPrimaryDark"
         android:padding="5dp"
         android:fontFamily="@font/poppinsmedium"
         android:layout_marginLeft="20dp"
@@ -75,17 +74,18 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <ImageView
+            android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
             android:layout_width="60px"
             android:layout_height="60px"
-            android:src="@drawable/ic_pembelian"/>
+            android:src="@drawable/ic_list"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pembelian"
+            android:text="List Pengajuan Approve"
             android:textSize="12sp"
             android:padding="5dp"
-            android:textColor="#ffff64"
+            android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/poppinsmedium"
             android:layout_marginLeft="20dp"
             />
@@ -96,253 +96,46 @@
         android:orientation="horizontal"
         android:padding="10dp">
         <ImageView
+            android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
             android:layout_width="60px"
             android:layout_height="60px"
-            android:src="@drawable/ic_store"/>
+            android:src="@drawable/ic_key"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gudang"
+            android:text="Ubah Password"
             android:textSize="12sp"
             android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-           />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_produksi"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Produksi"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
+            android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/poppinsmedium"
             android:layout_marginLeft="20dp"
             />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:padding="10dp">
         <ImageView
             android:layout_marginStart="10dp"
             android:layout_width="60px"
             android:layout_height="60px"
-            android:src="@drawable/ic_penjualan"/>
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_exit"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Penjualan"
+            android:text="Keluar"
             android:textSize="12sp"
             android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_finance"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Finance"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_aset"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aset"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_accounting"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Accounting"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_quality"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quality"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="65px"
-            android:layout_height="70px"
-            android:src="@drawable/ic_exim"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Exim"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_pengingat"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pengingat"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="65px"
-            android:layout_height="70px"
-            android:src="@drawable/ic_komisi"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Komisi"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_auditlog"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Audit Log"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
-            android:fontFamily="@font/poppinsmedium"
-            android:layout_marginLeft="20dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp">
-        <ImageView
-            android:layout_marginStart="10dp"
-            android:layout_width="65px"
-            android:layout_height="60px"
-            android:src="@drawable/ic_laporan"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Laporan"
-            android:textSize="12sp"
-            android:padding="5dp"
-            android:textColor="#ffff64"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="bottom"
+            android:textColor="@color/colorPrimaryDark"
             android:fontFamily="@font/poppinsmedium"
             android:layout_marginLeft="20dp"
             />
     </LinearLayout>
 </LinearLayout>
-</ScrollView>
-
 </LinearLayout>

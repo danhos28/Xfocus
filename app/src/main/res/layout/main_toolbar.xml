@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#0C1443"
+    android:background="#1E2CA3"
     android:elevation="4dp"
 
    >
@@ -29,7 +29,7 @@
             android:layout_marginStart="32dp"
             android:fontFamily="@font/poppinsbold"
             android:text="Area"
-            android:textColor="#ffff64"
+            android:textColor="#FFFF"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
             android:fontFamily="@font/poppinsmedium"
             android:id="@+id/NamaUser"
             android:text="User"
-            android:textColor="#ffff64"
+            android:textColor="#FFFF"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
