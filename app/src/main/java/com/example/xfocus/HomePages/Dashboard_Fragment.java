@@ -59,6 +59,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
@@ -107,6 +108,7 @@ public class Dashboard_Fragment extends Fragment implements AdapterView.OnItemSe
     ArrayList<String> valueHutang = new ArrayList<>();
     ArrayList<String> list_penj = new ArrayList<>();
     ArrayList<String> list_perse = new ArrayList<>();
+    ArrayList<String> list_perseValue = new ArrayList<>();
     ArrayList<String> list_kasB = new ArrayList<>();
     ArrayList<String> list_kasBValue = new ArrayList<>();
     ArrayList<String> list_pend = new ArrayList<>();
@@ -391,9 +393,9 @@ public class Dashboard_Fragment extends Fragment implements AdapterView.OnItemSe
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 PieEntry pe = (PieEntry) e;
-                SliceValue = String.valueOf(pe.getValue());
                 SliceLabel = pe.getLabel();
                 int idx=list_perse.indexOf(pe.getLabel());
+                SliceValue = list_perseValue.get(idx);
                 red=Color.red(diagramColors[idx]);
                 green=Color.green(diagramColors[idx]);
                 blue=Color.blue(diagramColors[idx]);
@@ -664,10 +666,11 @@ public class Dashboard_Fragment extends Fragment implements AdapterView.OnItemSe
                                             list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
                                             list_kasBValue.add(String.valueOf(0));
                                         }
-                                        else
+                                        else {
                                             kasB.add(new PieEntry(Math.abs(Float.parseFloat(Kasbank.getListKasbank().get(i + 1))), Kasbank.getListKasbank().get(i).toUpperCase()));
-                                        list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
-                                        list_kasBValue.add(Kasbank.getListKasbank().get(i+1));
+                                            list_kasB.add(Kasbank.getListKasbank().get(i).toUpperCase());
+                                            list_kasBValue.add(Kasbank.getListKasbank().get(i + 1));
+                                        }
                                     }
 
                                     setDonutCharts(kasB, diagramColors, donutChartKasdanBank, "KAS DAN BANK");
@@ -718,9 +721,10 @@ public class Dashboard_Fragment extends Fragment implements AdapterView.OnItemSe
                                 JSONObject jsonObject = response.getJSONObject(0);
                                 String label = jsonObject.optString("label");
                                 String value = jsonObject.optString("value");
+                                list_perseValue.add(value);
 
                                 JSONArray listpersediaan = response.getJSONArray(1);
-                                for (int i = 0; i < listpersediaan.length(); i++) {
+                                for (int i = 1; i < listpersediaan.length(); i++) {
                                     String persediaan = listpersediaan.getString(i);
                                     list_persediaan.add(persediaan);
                                 }
@@ -735,17 +739,20 @@ public class Dashboard_Fragment extends Fragment implements AdapterView.OnItemSe
                                         list_perse.add(Persediaan.getLabel().toUpperCase());
                                     }
                                     else{
-                                        perse.add(new PieEntry(Float.parseFloat(Persediaan.getValue()), Persediaan.getLabel().toUpperCase()));
+                                        perse.add(new PieEntry(Math.abs(Float.parseFloat(Persediaan.getValue())), Persediaan.getLabel().toUpperCase()));
                                         list_perse.add(Persediaan.getLabel().toUpperCase());
                                     }
-                                    for (int i = 1; i < Persediaan.getListPersediaan().size(); i += 2) {
+                                    for (int i = 0; i < Persediaan.getListPersediaan().size(); i += 2) {
                                         if(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)) == 0){
                                             perse.add(new PieEntry(1, Persediaan.getListPersediaan().get(i).toUpperCase()));
                                             list_perse.add(Persediaan.getListPersediaan().get(i).toUpperCase());
+                                            list_perseValue.add(String.valueOf(0));
                                         }
-                                        else
-                                            perse.add(new PieEntry(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1)), Persediaan.getListPersediaan().get(i).toUpperCase()));
-                                        list_perse.add(Persediaan.getListPersediaan().get(i).toUpperCase());
+                                        else {
+                                            perse.add(new PieEntry(Math.abs(Float.parseFloat(Persediaan.getListPersediaan().get(i + 1))), Persediaan.getListPersediaan().get(i).toUpperCase()));
+                                            list_perse.add(Persediaan.getListPersediaan().get(i).toUpperCase());
+                                            list_perseValue.add(Persediaan.getListPersediaan().get(i + 1));
+                                        }
                                     }
 
                                     setDonutCharts(perse, diagramColors, donutChartPersediaan, "PERSEDIAAN");
@@ -1299,7 +1306,7 @@ public class Dashboard_Fragment extends Fragment implements AdapterView.OnItemSe
         pieDataSet.setValueTextSize(16f);
 
         PieData pieData = new PieData(pieDataSet);
-        //pieData.setValueFormatter(new PercentFormatter(pieChart));
+        pieData.setValueFormatter(new PercentFormatter(pieChart));
         //pieData.setDrawValues(true);
         pieChart.setData(pieData);
         //Setting the diagram legend
